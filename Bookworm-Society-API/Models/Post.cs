@@ -8,7 +8,7 @@
         public bool isPinned { get; set; } = false;
         public bool isEdited { get; set; } = false;
 
-        public int BookId { get; set; }
+        public int BookClubId { get; set; }
         public int BookClub {  get; set; }
 
         public int UserId { get; set; }
