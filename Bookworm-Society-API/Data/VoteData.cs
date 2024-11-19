@@ -32,21 +32,6 @@ namespace Bookworm_Society_API.Data
             new() { Id = 13, UserId = 6, BookId = 113, VotingSessionId = 6 }, // Host voting in their club
             new() { Id = 14, UserId = 9, BookId = 114, VotingSessionId = 6 },
 
-            // Voting Session 7 (Thriller Thursdays - HostId = 7)
-            new() { Id = 15, UserId = 7, BookId = 115, VotingSessionId = 7 }, // Host voting in their club
-            new() { Id = 16, UserId = 10, BookId = 116, VotingSessionId = 7 },
-
-            // Voting Session 8 (Supernatural Circle - HostId = 8)
-            new() { Id = 17, UserId = 8, BookId = 117, VotingSessionId = 8 }, // Host voting in their club
-            new() { Id = 18, UserId = 11, BookId = 118, VotingSessionId = 8 },
-
-            // Voting Session 9 (Slice of Life - HostId = 9)
-            new() { Id = 19, UserId = 9, BookId = 119, VotingSessionId = 9 }, // Host voting in their club
-            new() { Id = 20, UserId = 12, BookId = 120, VotingSessionId = 9 },
-
-            // Voting Session 10 (Horror House - HostId = 10)
-            new() { Id = 21, UserId = 10, BookId = 121, VotingSessionId = 10 }, // Host voting in their club
-            new() { Id = 22, UserId = 13, BookId = 122, VotingSessionId = 10 }
         };
 
     }

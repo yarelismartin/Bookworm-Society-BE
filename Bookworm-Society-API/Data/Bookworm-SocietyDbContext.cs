@@ -44,14 +44,14 @@ namespace Bookworm_Society_API.Data
 
             modelBuilder.Entity<VotingSession>()
                 .HasOne(vs => vs.WinningBook)
-                .WithMany(b => b.VotingSessions)
+                .WithMany() 
                 .HasForeignKey(vs => vs.WinningBookId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired(false);
 
             modelBuilder.Entity<VotingSession>()
                 .HasMany(vs => vs.VotingBooks)
-                .WithMany(vs => vs.VotingSessions)
+                .WithMany(b => b.VotingSessions)
                 .UsingEntity(j => j.ToTable("VotingSessionBooks"));
 
 

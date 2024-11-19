@@ -15,7 +15,7 @@
         public int BookId { get; set; }
         public Book Book { get; set; }
 
-        public List<VotingSession>? VotingSession {  get; set; }
+        public List<VotingSession>? VotingSessions {  get; set; }
         public List<User>? Members { get; set; }
         public List<Book>? HaveRead {  get; set; }
         public List<Post>? Posts { get; set; }

@@ -8,7 +8,7 @@ namespace Bookworm_Society_API.Data
             {
                 new() {
                     Id = 1,
-                    isActive = true,
+                    IsActive = true,
                     VotingStartDate = new DateTime(2023, 11, 14),
                     VotingEndDate = new DateTime(2023, 11, 18),
                     BookClubId = 1,
@@ -16,7 +16,7 @@ namespace Bookworm_Society_API.Data
                 },
                 new() {
                     Id = 2,
-                    isActive = true,
+                    IsActive = true,
                     VotingStartDate = new DateTime(2023, 11, 15),
                     VotingEndDate = new DateTime(2023, 11, 19),
                     BookClubId = 2,
@@ -24,15 +24,15 @@ namespace Bookworm_Society_API.Data
                 },
                 new() {
                     Id = 3,
-                    isActive = false,
+                    IsActive = false,
                     VotingStartDate = new DateTime(2023, 11, 1),
                     VotingEndDate = new DateTime(2023, 11, 4),
-                    WinningBookId = 7,
+                    WinningBookId = 107,
                     BookClubId = 3
                 },
                 new() {
                     Id = 4,
-                    isActive = true,
+                    IsActive = true,
                     VotingStartDate = new DateTime(2023, 11, 16),
                     VotingEndDate = new DateTime(2023, 11, 20),
                     BookClubId = 4,
@@ -40,15 +40,15 @@ namespace Bookworm_Society_API.Data
                 },
                 new() {
                     Id = 5,
-                    isActive = false,
+                    IsActive = false,
                     VotingStartDate = new DateTime(2023, 10, 25),
                     VotingEndDate = new DateTime(2023, 10, 29),
-                    WinningBookId = 13,
+                    WinningBookId = 113,
                     BookClubId = 5
                 },
                 new() {
                     Id = 6,
-                    isActive = true,
+                    IsActive = true,
                     VotingStartDate = new DateTime(2023, 11, 18),
                     VotingEndDate = new DateTime(2023, 11, 22),
                     BookClubId = 6,

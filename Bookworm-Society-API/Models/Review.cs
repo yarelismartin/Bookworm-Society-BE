@@ -15,7 +15,7 @@ namespace Bookworm_Society_API.Models
         public User User { get; set; }
 
         public int BookId { get; set; }
-        public User Book { get; set; }
+        public Book Book { get; set; }
 
 
     }

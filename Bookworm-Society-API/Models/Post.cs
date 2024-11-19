@@ -5,11 +5,11 @@
         public int Id { get; set; }
         public string Content { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
-        public bool isPinned { get; set; } = false;
-        public bool isEdited { get; set; } = false;
+        public bool IsPinned { get; set; } = false;
+        public bool IsEdited { get; set; } = false;
 
         public int BookClubId { get; set; }
-        public int BookClub {  get; set; }
+        public BookClub BookClub {  get; set; }
 
         public int UserId { get; set; }
         public User User { get; set; }
