@@ -3,7 +3,7 @@
     public class VotingSession
     {
         public int Id { get; set; }
-        public bool isActive { get; set; }
+        public bool IsActive { get; set; }
         public DateTime VotingStartDate { get; set; } = DateTime.Now;
         public DateTime VotingEndDate { get; set; }
 
