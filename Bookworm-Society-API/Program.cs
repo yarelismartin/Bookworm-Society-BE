@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Bookworm_Society_API.Services;
 using Bookworm_Society_API.Repositories;
 using Bookworm_Society_API.Endpoints;
+using Bookworm_Society_API.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 // allows our api endpoints to access the database through Entity Framework Core
-//builder.Services.AddNpgsql<Bookworm-SocietyDbContext>(builder.Configuration["Bookworm-SocietyDbConnectionString"]);
+builder.Services.AddNpgsql<Bookworm_SocietyDbContext>(builder.Configuration["Bookworm-SocietyDbConnectionString"]);
 
 // Set the JSON serializer options
 builder.Services.Configure<JsonOptions>(options =>
@@ -52,6 +53,7 @@ builder.Services.AddScoped<IBookRepository, BookRepository>();*/
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

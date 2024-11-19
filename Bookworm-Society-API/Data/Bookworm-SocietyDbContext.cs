@@ -21,19 +21,54 @@ namespace Bookworm_Society_API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // modelBuilder.Entity<VotingSession>().HasData(VotingSessionData.VotingSessions);
+            modelBuilder.Entity<BookClub>()
+                .HasOne(bc => bc.Book)          
+                .WithMany()                     
+                .HasForeignKey(bc => bc.BookId) 
+                .OnDelete(DeleteBehavior.Restrict);
 
-            //  modelBuilder.Entity<User>().HasData(UserData.Users);
+            modelBuilder.Entity<BookClub>()
+                .HasMany(bc => bc.HaveRead)  
+                .WithMany(b => b.BookClubs) 
+                .UsingEntity(j => j.ToTable("BookClubsHaveReadBook"));
 
-            //  modelBuilder.Entity<Review>().HasData(ReviewData.Reviews);
+            modelBuilder.Entity<BookClub>()
+                .HasOne(bc => bc.Host)
+                .WithMany(u => u.HostedBookClubs)
+                .HasForeignKey(bc => bc.HostId);
 
-            // modelBuilder.Entity<Post>().HasData(PostData.Posts);
+            modelBuilder.Entity<BookClub>()
+                .HasMany(bc => bc.Members)
+                .WithMany(u => u.MemberBookClubs)
+                .UsingEntity(j => j.ToTable("UserBookClubMembership"));
 
-            //  modelBuilder.Entity<Comment>().HasData(CommentData.Comments);
+            modelBuilder.Entity<VotingSession>()
+                .HasOne(vs => vs.WinningBook)
+                .WithMany(b => b.VotingSessions)
+                .HasForeignKey(vs => vs.WinningBookId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired(false);
 
-            // modelBuilder.Entity<BookClub>().HasData(BookClubData.BookClubs);
+            modelBuilder.Entity<VotingSession>()
+                .HasMany(vs => vs.VotingBooks)
+                .WithMany(vs => vs.VotingSessions)
+                .UsingEntity(j => j.ToTable("VotingSessionBooks"));
 
-            // modelBuilder.Entity<Book>().HasData(BookData.Books);
+
+
+            modelBuilder.Entity<VotingSession>().HasData(VotingSessionData.VotingSessions);
+
+            modelBuilder.Entity<User>().HasData(UserData.Users);
+
+            modelBuilder.Entity<Review>().HasData(ReviewData.Reviews);
+
+            modelBuilder.Entity<Post>().HasData(PostData.Posts);
+
+            modelBuilder.Entity<Comment>().HasData(CommentData.Comments);
+
+            modelBuilder.Entity<BookClub>().HasData(BookClubData.BookClubs);
+
+            modelBuilder.Entity<Book>().HasData(BookData.Books);
 
         }
     }

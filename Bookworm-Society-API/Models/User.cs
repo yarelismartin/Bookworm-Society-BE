@@ -9,8 +9,6 @@
         public string Username { get; set; }
         public DateTime JoinedDate { get; set; } = DateTime.Now;
         public string Uid { get; set; }
-
-        public List<Vote>? Votes { get; set; }
         public List <BookClub>? BookClubs { get; set; }
 
     }

@@ -8,7 +8,7 @@
         public string Author { get; set; } 
         public string Genre { get; set; }
         public string imageUrl { get; set; }
-        public List<VotingSession>? VotingSession {  get; set; }
+        public List<VotingSession>? VotingSessions {  get; set; }
         public List<BookClub>? BookClubs { get; set;}
         public List<Review>? Reviews { get; set; }
 
