@@ -2,9 +2,9 @@
 
 namespace Bookworm_Society_API.Endpoints
 {
-    public static class BookClubEndpoint
+    public static class BookClubEndpoints
     {
-        public static void MapCategoryEndpoint(this IEndpointRouteBuilder routes)
+        public static void MapBookClubEndpoints(this IEndpointRouteBuilder routes)
         {
             var group = routes.MapGroup("").WithTags(nameof(BookClub));
         }

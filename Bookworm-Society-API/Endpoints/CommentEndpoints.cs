@@ -2,9 +2,9 @@
 
 namespace Bookworm_Society_API.Endpoints
 {
-    public static class CommentEndpoint
+    public static class CommentEndpoints
     {
-        public static void MapCategoryEndpoint(this IEndpointRouteBuilder routes)
+        public static void MapCommentEndpoints(this IEndpointRouteBuilder routes)
         {
             var group = routes.MapGroup("").WithTags(nameof(Comment));
         }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.Json;
 using System.Text.Json.Serialization;
 using Bookworm_Society_API.Services;
 using Bookworm_Society_API.Repositories;
+using Bookworm_Society_API.Endpoints;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,11 +47,6 @@ builder.Services.AddScoped<IBookRepository, BookRepository>();*/
 
 
 
-
-
-
-
-
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -64,5 +60,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapBookClubEndpoints();
+app.MapBookEndpoints(); 
+app.MapCommentEndpoints();
+app.MapPostEndpoints();
+app.MapReviewEndpoints();
+app.MapUserEndpoints();
+app.MapVoteEndpoints();
+app.MapVotingSessionEndpoints();
 
 app.Run();

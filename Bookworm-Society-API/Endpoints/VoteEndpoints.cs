@@ -2,9 +2,9 @@
 
 namespace Bookworm_Society_API.Endpoints
 {
-    public static class VoteEndpoint
+    public static class VoteEndpoints
     {
-        public static void MapCategoryEndpoint(this IEndpointRouteBuilder routes)
+        public static void MapVoteEndpoints(this IEndpointRouteBuilder routes)
         {
             var group = routes.MapGroup("").WithTags(nameof(Vote));
         }
