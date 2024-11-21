@@ -68,14 +68,19 @@ namespace Bookworm_Society_API.Services
 
             if (bookClubToUpdate == null)
             {
-                return Result<BookClub>.FailureResult($"No book club was found with the following id: ${bookClubId}", ErrorType.NotFound);
+                return Result<BookClub>.FailureResult($"No book club was found with the following id: {bookClubId}", ErrorType.NotFound);
             }
-
+             
             return Result<BookClub>.SuccessResult(bookClubToUpdate);
         }
-        public async Task<BookClub> DeleteBookClubAsync(int bookClubId)
+        public async Task<Result<BookClub>> DeleteBookClubAsync(int bookClubId)
         {
-            return await _bookClubRepository.DeleteBookClubAsync(bookClubId);
+            var bookClubToDelete =  await _bookClubRepository.DeleteBookClubAsync(bookClubId);
+            if(bookClubToDelete == null)
+            {
+                return Result<BookClub>.FailureResult($"No book club was found with the following id: {bookClubId}", ErrorType.NotFound);
+            };
+            return Result<BookClub>.SuccessResult(bookClubToDelete);
         }
 
     }

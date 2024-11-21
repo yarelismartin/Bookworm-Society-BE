@@ -10,6 +10,6 @@ namespace Bookworm_Society_API.Interfaces
         Task<BookClub?> GetBookClubByIdAsync(int bookClubId);
         Task<Result<BookClub>> CreateBookClubAsync(BookClub bookClub);
         Task<Result<BookClub>> UpdateBookClubAsync(BookClub bookClub, int bookClubId);
-        Task<BookClub> DeleteBookClubAsync(int bookClubId);
+        Task<Result<BookClub>> DeleteBookClubAsync(int bookClubId);
     }
 }

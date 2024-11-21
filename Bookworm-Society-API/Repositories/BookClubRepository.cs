@@ -59,7 +59,17 @@ namespace Bookworm_Society_API.Repositories
         }
         public async Task<BookClub> DeleteBookClubAsync(int bookClubId)
             {
-                throw new NotImplementedException();
+                var bookClubToDelete = await dbContext.BookClubs.SingleOrDefaultAsync(bc => bc.Id == bookClubId);
+                
+                if (bookClubToDelete == null)
+                {
+                    return null;
+                }
+
+                dbContext.BookClubs.Remove(bookClubToDelete);
+
+                await dbContext.SaveChangesAsync();
+                return bookClubToDelete;
             }
 
     }

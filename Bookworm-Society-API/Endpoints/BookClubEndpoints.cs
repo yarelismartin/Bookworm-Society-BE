@@ -97,7 +97,15 @@ namespace Bookworm_Society_API.Endpoints
                 return Results.Ok(result.Data);
             });
 
-            
+            group.MapDelete("/{bookClubId}", async (IBookClubService bookClubService, int bookClubId) =>
+            {
+                var bookToDelete = await bookClubService.DeleteBookClubAsync(bookClubId);
+                if (bookToDelete.ErrorType == ErrorType.NotFound)
+                {
+                    return Results.NotFound(bookToDelete.Message);
+                }
+                return Results.Ok(bookToDelete.Data);
+            });
         }
     }
 }
