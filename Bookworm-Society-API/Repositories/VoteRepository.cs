@@ -3,11 +3,11 @@ using Bookworm_Society_API.Interfaces;
 
 namespace Bookworm_Society_API.Repositories
 {
-    public class VoteService : IVoteRepository
+    public class VoteRepository : IVoteRepository
     {
         private readonly Bookworm_SocietyDbContext dbContext;
 
-        public VoteService(Bookworm_SocietyDbContext context)
+        public VoteRepository(Bookworm_SocietyDbContext context)
         {
             dbContext = context;
         }

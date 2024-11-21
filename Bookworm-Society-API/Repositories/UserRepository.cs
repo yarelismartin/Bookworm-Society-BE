@@ -3,11 +3,11 @@ using Bookworm_Society_API.Interfaces;
 
 namespace Bookworm_Society_API.Repositories
 {
-    public class UserService : IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly Bookworm_SocietyDbContext dbContext;
 
-        public UserService(Bookworm_SocietyDbContext context)
+        public UserRepository(Bookworm_SocietyDbContext context)
         {
             dbContext = context;
         }
