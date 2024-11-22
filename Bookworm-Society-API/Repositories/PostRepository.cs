@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookworm_Society_API.Repositories
 {
-    public class PostService : IPostRepository
+    public class PostRepository : IPostRepository
     {
         private readonly Bookworm_SocietyDbContext dbContext;
-        public PostService(Bookworm_SocietyDbContext context)
+        public PostRepository(Bookworm_SocietyDbContext context)
         {
             dbContext = context;
         }

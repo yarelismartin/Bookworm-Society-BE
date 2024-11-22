@@ -22,7 +22,7 @@ builder.Services.Configure<JsonOptions>(options =>
     options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
-/*builder.Services.AddScoped<IVotingSessionService, VotingSessionService>();
+builder.Services.AddScoped<IVotingSessionService, VotingSessionService>();
 builder.Services.AddScoped<IVotingSessionRepository, VotingSessionRepository>();
 
 builder.Services.AddScoped<IVoteService, VoteService>();
@@ -40,13 +40,13 @@ builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IBookRepository, BookRepository>();
+
 builder.Services.AddScoped<IBookClubService, BookClubService>();
 builder.Services.AddScoped<IBookClubRepository, BookClubRepository>();
 
-builder.Services.AddScoped<IBookService, BookService>();
-builder.Services.AddScoped<IBookRepository, BookRepository>();*/
-
-
+builder.Services.AddScoped<IBaseRepository, BaseRepository>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
