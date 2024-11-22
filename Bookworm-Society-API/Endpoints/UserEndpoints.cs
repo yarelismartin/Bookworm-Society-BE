@@ -1,4 +1,6 @@
-﻿using Bookworm_Society_API.Models;
+﻿using Bookworm_Society_API.Interfaces;
+using Bookworm_Society_API.Models;
+using Bookworm_Society_API.Result;
 
 namespace Bookworm_Society_API.Endpoints
 {
@@ -6,7 +8,18 @@ namespace Bookworm_Society_API.Endpoints
     {
         public static void MapUserEndpoints(this IEndpointRouteBuilder routes)
         {
-            var group = routes.MapGroup("").WithTags(nameof(User));
+            var group = routes.MapGroup("users").WithTags(nameof(User));
+
+            group.MapGet("/{userId}", async (IUserService userService, int userId) =>
+            {
+                var result = await userService.GetUserByIdAsync(userId);
+
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return Results.NotFound(result.Message);
+                }
+                return Results.Ok(result.Data);
+            });
         }
     }
 }
