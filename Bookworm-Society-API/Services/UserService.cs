@@ -17,15 +17,27 @@ namespace Bookworm_Society_API.Services
             _baseRepository = baseRepository;
         }
 
-        public async Task<Result<User>> GetUserByIdAsync(int userId)
+        public async Task<Result<object>> GetUserByIdAsync(int userId)
         {
              var user = await _userRepository.GetUserByIdAsync(userId);
             if (user == null)
             {
-                return Result<User>.FailureResult($"No user was found with the following id: {userId}", ErrorType.NotFound);
+                return Result<object>.FailureResult($"No user was found with the following id: {userId}", ErrorType.NotFound);
             }
 
-            return Result<User>.SuccessResult(user);
+            var userObj = new
+            {
+                user.Id,
+                user.FirstName,
+                user.LastName,
+                user.ImageUrl,
+                user.Username,
+                user.JoinedDate,
+                user.Uid,
+
+            };
+
+            return Result<object>.SuccessResult(userObj);
 
         }
 
