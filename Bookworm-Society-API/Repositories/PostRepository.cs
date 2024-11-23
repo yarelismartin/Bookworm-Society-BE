@@ -14,7 +14,9 @@ namespace Bookworm_Society_API.Repositories
         }
         public async Task<Post?> GetPostByIdAsync(int postId)
         {
-            var post = await dbContext.Posts.SingleOrDefaultAsync(p => p.Id == postId);
+            var post = await dbContext.Posts
+                .Include(p => p.Comments)
+                .SingleOrDefaultAsync(p => p.Id == postId);
             if (post == null)
             {
                 return null;
@@ -36,8 +38,7 @@ namespace Bookworm_Society_API.Repositories
             }
 
             postToUpdate.Content = post.Content;
-            postToUpdate.IsPinned = post.IsPinned;
-            postToUpdate.IsEdited = post.IsEdited;
+            postToUpdate.IsEdited = true;
 
             dbContext.SaveChangesAsync();
 

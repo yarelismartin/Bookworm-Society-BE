@@ -44,8 +44,8 @@ namespace Bookworm_Society_API.Services
             Post postObj = new()
             {
                 Content = post.Content,
-                IsPinned = post.IsPinned,
-                IsEdited = post.IsEdited,
+                IsPinned = false,
+                IsEdited = false,
                 BookClubId = post.BookClubId,
                 UserId = post.UserId
             };

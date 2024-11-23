@@ -47,9 +47,16 @@ namespace Bookworm_Society_API.Endpoints
                 return Results.Ok(result.Data);
             });
 
-            group.MapDelete("/{postId}", async (IPostService postService, Post post, int postId) =>
+            group.MapDelete("/{postId}", async (IPostService postService, int postId) =>
             {
+                var result = await postService.DeletePostAsync(postId);
 
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return Results.NotFound(result.Message);
+                }
+
+                return Results.Ok(result.Data);
             });
         }
     }
