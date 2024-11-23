@@ -23,19 +23,42 @@ namespace Bookworm_Society_API.Services
             var allBookClubs = await _bookClubRepository.GetBookClubsAsync();
             return allBookClubs.Select(bookClub => new BookClubDTO(bookClub)).ToList();
         }
-        public async Task<BookClub?> GetBookClubByIdAsync(int bookClubId)
+        public async Task<Result<object?>> GetBookClubByIdAsync(int bookClubId, int userId)
         {
-            return await _bookClubRepository.GetBookClubByIdAsync(bookClubId);
+            if (!await _baseRepository.UserExistsAsync(userId))
+            {
+                return Result<object>.FailureResult($"No user was found with the following id: {userId}", ErrorType.NotFound);
+            }
+
+            var bookClub = await _bookClubRepository.GetBookClubByIdAsync(bookClubId);
+
+           if (bookClub == null )
+            {
+                return Result<object>.FailureResult($"No book club was found with the following id: {bookClubId}", ErrorType.NotFound);
+            }
+
+            var dto = new
+            {
+                bookClub.Id,
+                bookClub.Name,
+                bookClub.Description,
+                bookClub.MeetUpType,
+                bookClub.ImageUrl,
+                bookClub.DateCreated,
+                Host = new UserDTO(bookClub.Host),
+                Book = new BookDTO(bookClub.Book),
+                Members = bookClub.Members?.Select(member => new UserDTO(member)).ToList(),
+                isMemberOrHost = bookClub.Members.Any(m => m.Id == userId) || bookClub.Host.Id == userId,
+            };
+
+            return Result<object>.SuccessResult(dto);
+
         }
         public async Task<Result<BookClub>> CreateBookClubAsync(BookClub bookClub)
         {
             if(!await _baseRepository.UserExistsAsync(bookClub.HostId))
             {
                 return Result<BookClub>.FailureResult($"No host was found with the following id: {bookClub.HostId}", ErrorType.NotFound);
-            }
-            if (!await _baseRepository.BookExistsAsync(bookClub.BookId))
-            {
-                return Result<BookClub>.FailureResult($"No book was found with the following id: {bookClub.BookId}", ErrorType.NotFound);
             }
 
 
@@ -46,7 +69,6 @@ namespace Bookworm_Society_API.Services
                 Description = bookClub.Description,
                 ImageUrl = bookClub.ImageUrl,
                 HostId = bookClub.HostId,
-                BookId = bookClub.BookId,
             };
 
             var createdBook = await _bookClubRepository.CreateBookClubAsync(newBookClub);
@@ -58,10 +80,6 @@ namespace Bookworm_Society_API.Services
             if (!await _baseRepository.UserExistsAsync(bookClub.HostId))
             {
                 return Result<BookClub>.FailureResult($"Not host was found with the following id: {bookClub.HostId}", ErrorType.NotFound);
-            }
-            if (!await _baseRepository.BookExistsAsync(bookClub.BookId))
-            {
-                return Result<BookClub>.FailureResult($"Not book was found with the following id: {bookClub.HostId}", ErrorType.NotFound);
             }
 
             var bookClubToUpdate = await _bookClubRepository.UpdateBookClubAsync(bookClub, bookClubId);

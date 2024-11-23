@@ -12,8 +12,8 @@
         public int HostId { get; set; }
         public User Host {  get; set; }
 
-        public int BookId { get; set; }
-        public Book Book { get; set; }
+        public int? BookId { get; set; }
+        public Book? Book { get; set; }
 
         public List<VotingSession>? VotingSessions {  get; set; }
         public List<User>? Members { get; set; }
