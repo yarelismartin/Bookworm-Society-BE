@@ -1,6 +1,7 @@
 ﻿using Bookworm_Society_API.DTOs;
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
+using Bookworm_Society_API.Repositories;
 using Bookworm_Society_API.Result;
 using System.Text.RegularExpressions;
 
@@ -23,29 +24,15 @@ namespace Bookworm_Society_API.Endpoints
                 return Results.Ok(allBookClubs);
             });
 
-            group.MapGet("/{bookClubId}", async (IBookClubService bookClubService, int bookClubId) =>
+            group.MapGet("/{bookClubId}", async (IBookClubService bookClubService, int bookClubId, int userId) =>
             {
-                var bookClub = await bookClubService.GetBookClubByIdAsync(bookClubId);
+                var bookClub = await bookClubService.GetBookClubByIdAsync(bookClubId, userId);
 
-                if (bookClub == null)
+                if (bookClub.ErrorType == ErrorType.NotFound)
                 {
-                    return Results.NotFound($"No book club was found with the following id: {bookClubId}");
+                    return Results.NotFound(bookClub.Message);
                 }
-
-                var dto = new
-                {
-                    bookClub.Id,
-                    bookClub.Name,
-                    bookClub.Description,
-                    bookClub.MeetUpType,
-                    bookClub.ImageUrl,
-                    bookClub.DateCreated,
-                    Host = new UserDTO(bookClub.Host),
-                    Book = new BookDTO(bookClub.Book),
-                    Members = bookClub.Members?.Select(member => new UserDTO(member)).ToList(),
-                };
-
-                return Results.Ok(dto);
+                return Results.Ok(bookClub.Data);
             });
 
             group.MapPost("/", async (IBookClubService bookClubService, BookClub bookClub) =>

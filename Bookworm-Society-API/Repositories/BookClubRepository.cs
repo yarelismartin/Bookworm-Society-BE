@@ -24,11 +24,16 @@ namespace Bookworm_Society_API.Repositories
 
         public async Task<BookClub?> GetBookClubByIdAsync(int bookClubId)
         {
-            return await dbContext.BookClubs
+            var bookClub =  await dbContext.BookClubs
                 .Include(bc => bc.Host)
                 .Include(bc => bc.Book)
                 .Include(bc => bc.Members)
                 .SingleOrDefaultAsync(bc => bc.Id == bookClubId);
+            if (bookClub == null)
+            {
+                return null;
+            }
+            return bookClub;
          }
 
         public async Task<BookClub> CreateBookClubAsync(BookClub bookClub)
