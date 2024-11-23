@@ -52,7 +52,6 @@ namespace Bookworm_Society_API.Repositories
             bookClubToUpdate.Description = bookClub.Description;
             bookClubToUpdate.ImageUrl = bookClub.ImageUrl;
             bookClubToUpdate.HostId = bookClub.HostId;
-            bookClubToUpdate.BookId = bookClub.BookId;
 
             await dbContext.SaveChangesAsync();
             return bookClubToUpdate;

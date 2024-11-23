@@ -33,10 +33,6 @@ namespace Bookworm_Society_API.Services
             {
                 return Result<BookClub>.FailureResult($"No host was found with the following id: {bookClub.HostId}", ErrorType.NotFound);
             }
-            if (!await _baseRepository.BookExistsAsync(bookClub.BookId))
-            {
-                return Result<BookClub>.FailureResult($"No book was found with the following id: {bookClub.BookId}", ErrorType.NotFound);
-            }
 
 
             BookClub newBookClub = new()
@@ -46,7 +42,6 @@ namespace Bookworm_Society_API.Services
                 Description = bookClub.Description,
                 ImageUrl = bookClub.ImageUrl,
                 HostId = bookClub.HostId,
-                BookId = bookClub.BookId,
             };
 
             var createdBook = await _bookClubRepository.CreateBookClubAsync(newBookClub);
@@ -58,10 +53,6 @@ namespace Bookworm_Society_API.Services
             if (!await _baseRepository.UserExistsAsync(bookClub.HostId))
             {
                 return Result<BookClub>.FailureResult($"Not host was found with the following id: {bookClub.HostId}", ErrorType.NotFound);
-            }
-            if (!await _baseRepository.BookExistsAsync(bookClub.BookId))
-            {
-                return Result<BookClub>.FailureResult($"Not book was found with the following id: {bookClub.HostId}", ErrorType.NotFound);
             }
 
             var bookClubToUpdate = await _bookClubRepository.UpdateBookClubAsync(bookClub, bookClubId);
