@@ -1,4 +1,5 @@
 ﻿using Bookworm_Society_API.Data;
+using Bookworm_Society_API.DTOs;
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Bookworm_Society_API.Result;
@@ -18,15 +19,36 @@ namespace Bookworm_Society_API.Services
         }
 
         //Get single post
-        public async Task<Result<Post?>> GetPostByIdAsync(int postId)
+        public async Task<Result<object?>> GetPostByIdAsync(int postId)
         {
             var post = await _postRepository.GetPostByIdAsync(postId);
 
             if (post == null)
             {
-                return Result<Post>.FailureResult($"No post was found with the following id: {postId}", ErrorType.NotFound);
+                return Result<object>.FailureResult($"No post was found with the following id: {postId}", ErrorType.NotFound);
             }
-            return Result<Post>.SuccessResult(post);
+
+            var postObj = new
+            {
+                post.Id,
+                post.Content,
+                post.CreatedDate,
+                post.IsPinned,
+                post.IsEdited,
+                User = new UserDTO(post.User),
+                Comments = post.Comments?
+                .OrderBy(c => c.CreatedDate)
+                .Select(c => new
+                {
+                    c.Id,
+                    c.Content,
+                    c.CreatedDate,
+                    User = new UserDTO(c.User),
+                })
+            };
+
+
+            return Result<object>.SuccessResult(postObj);
 
         }
         //Create post

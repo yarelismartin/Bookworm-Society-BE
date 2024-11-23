@@ -1,6 +1,7 @@
 ﻿using Bookworm_Society_API.Data;
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bookworm_Society_API.Repositories
@@ -16,6 +17,8 @@ namespace Bookworm_Society_API.Repositories
         {
             var post = await dbContext.Posts
                 .Include(p => p.Comments)
+                .ThenInclude(c => c.User)
+                .Include(p => p.User)
                 .SingleOrDefaultAsync(p => p.Id == postId);
             if (post == null)
             {
