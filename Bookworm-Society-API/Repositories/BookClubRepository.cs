@@ -17,7 +17,9 @@ namespace Bookworm_Society_API.Repositories
 
         public async Task<List<BookClub>> GetBookClubsAsync()
         {
-            return await dbContext.BookClubs.ToListAsync();
+            return await dbContext.BookClubs
+                .OrderByDescending(bc => bc.Members.Count())
+                .ToListAsync();
         }
 
         public async Task<BookClub?> GetBookClubByIdAsync(int bookClubId)
@@ -26,8 +28,6 @@ namespace Bookworm_Society_API.Repositories
                 .Include(bc => bc.Host)
                 .Include(bc => bc.Book)
                 .Include(bc => bc.Members)
-                .Include(bc => bc.HaveRead)
-                // I'm not include post here because i think this would be too much data being returned
                 .SingleOrDefaultAsync(bc => bc.Id == bookClubId);
          }
 

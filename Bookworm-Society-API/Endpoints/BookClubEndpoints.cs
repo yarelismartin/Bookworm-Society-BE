@@ -1,4 +1,5 @@
-﻿using Bookworm_Society_API.Interfaces;
+﻿using Bookworm_Society_API.DTOs;
+using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Bookworm_Society_API.Result;
 using System.Text.RegularExpressions;
@@ -39,34 +40,9 @@ namespace Bookworm_Society_API.Endpoints
                     bookClub.MeetUpType,
                     bookClub.ImageUrl,
                     bookClub.DateCreated,
-                    Host = new
-                    {
-                        bookClub.Host.Id,
-                        bookClub.Host.Username,
-                        bookClub.Host.ImageUrl
-                    },
-                    Book = new
-                    {
-                        bookClub.Book.Id,
-                        bookClub.Book.Title,
-                        bookClub.Book.Author,
-                        bookClub.Book.Genre,
-                        bookClub.Book.Description,
-                    },
-                    Members = bookClub.Members?.Select(member => new
-                    {
-                        member.Id,
-                        member.Username,
-                        member.ImageUrl
-                    }),
-                    HaveRead = bookClub.HaveRead?.Select(book => new
-                    {
-                        book.Id,
-                        book.Title,
-                        book.Author,
-                        book.Genre,
-                        book.Description,
-                    })
+                    Host = new UserDTO(bookClub.Host),
+                    Book = new BookDTO(bookClub.Book),
+                    Members = bookClub.Members?.Select(member => new UserDTO(member)).ToList(),
                 };
 
                 return Results.Ok(dto);
