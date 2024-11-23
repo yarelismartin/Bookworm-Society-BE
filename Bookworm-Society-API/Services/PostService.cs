@@ -2,6 +2,7 @@
 using Bookworm_Society_API.DTOs;
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
+using Bookworm_Society_API.Repositories;
 using Bookworm_Society_API.Result;
 using Microsoft.EntityFrameworkCore;
 
@@ -62,6 +63,10 @@ namespace Bookworm_Society_API.Services
             {
                 return Result<Post>.FailureResult($"No book club exist with the following id: {post.BookClubId}", ErrorType.NotFound);
             }
+            if (!await _postRepository.IsUserAllowedToPost(post.BookClubId, post.UserId))
+            {
+                return Result<Post>.FailureResult("User is not a member or host of this book club.", ErrorType.Conflict);
+            }
 
             Post postObj = new()
             {
@@ -78,15 +83,6 @@ namespace Bookworm_Society_API.Services
         //Update post 
         public async Task<Result<Post>> UpdatePostAsync(Post post, int postId)
         {
-           /* if (!await _baseRepository.UserExistsAsync(post.UserId))
-            {
-                return Result<Post>.FailureResult($"No user exist with the following id: {post.UserId}", ErrorType.NotFound);
-            }
-
-            if (!await _baseRepository.BookClubExistsAsync(post.BookClubId))
-            {
-                return Result<Post>.FailureResult($"No book club exist with the following id: {post.BookClubId}", ErrorType.NotFound);
-            }*/
 
             var postToUpdate = await _postRepository.UpdatePostAsync(post, postId);
 

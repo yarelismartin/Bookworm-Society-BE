@@ -31,6 +31,10 @@ namespace Bookworm_Society_API.Endpoints
                 {
                     return Results.NotFound(result.Message);
                 }
+                if (result.ErrorType == ErrorType.Conflict)
+                {
+                    return Results.Conflict(result.Message);
+                }
 
                 return Results.Ok(result.Data);
             });

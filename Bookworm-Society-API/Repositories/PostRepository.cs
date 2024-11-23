@@ -61,5 +61,19 @@ namespace Bookworm_Society_API.Repositories
             await dbContext.SaveChangesAsync();
             return postToDelete;
         }
+
+        public async Task<bool> IsUserAllowedToPost(int bookClubId, int  userId)
+        {
+            var bookClub = await dbContext.BookClubs
+                .Include(bc => bc.Members)
+                .Include(bc => bc.Host)
+                .SingleOrDefaultAsync(bc => bc.Id == bookClubId);
+
+            bool isHost = bookClub.Host.Id == userId;
+            bool isMember = bookClub.Members?.Any(m => m.Id == userId) == true;
+
+            return isHost || isMember;
+        }
+
     }
 }
