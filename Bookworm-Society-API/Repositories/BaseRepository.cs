@@ -20,7 +20,11 @@ namespace Bookworm_Society_API.Repositories
         }
         public async Task<bool> BookExistsAsync(int bookId)
         {
-            return await dbContext.Books.AnyAsync(u => u.Id == bookId);
+            return await dbContext.Books.AnyAsync(b => b.Id == bookId);
+        }
+        public async Task<bool> BookClubExistsAsync(int bookClubId)
+        {
+            return await dbContext.BookClubs.AnyAsync(bc => bc.Id == bookClubId);
         }
 
         public async Task<BookClub?> GetSingleBookClubAsync(int bookClubId)

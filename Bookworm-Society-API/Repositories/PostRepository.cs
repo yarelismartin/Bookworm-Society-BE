@@ -1,5 +1,6 @@
 ﻿using Bookworm_Society_API.Data;
 using Bookworm_Society_API.Interfaces;
+using Bookworm_Society_API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bookworm_Society_API.Repositories
@@ -10,6 +11,51 @@ namespace Bookworm_Society_API.Repositories
         public PostRepository(Bookworm_SocietyDbContext context)
         {
             dbContext = context;
+        }
+        public async Task<Post?> GetPostByIdAsync(int postId)
+        {
+            var post = await dbContext.Posts.SingleOrDefaultAsync(p => p.Id == postId);
+            if (post == null)
+            {
+                return null;
+            }
+            return post;
+        }
+        public async Task<Post> CreatePostAsync(Post post)
+        {
+            await dbContext.Posts.AddAsync(post);
+            await dbContext.SaveChangesAsync();
+            return post;
+        }
+        public async Task<Post> UpdatePostAsync(Post post, int postId)
+        {
+            var postToUpdate = await dbContext.Posts.SingleOrDefaultAsync(p => p.Id == postId);
+            if (postToUpdate == null)
+            {
+                return null;
+            }
+
+            postToUpdate.Content = post.Content;
+            postToUpdate.IsPinned = post.IsPinned;
+            postToUpdate.IsEdited = post.IsEdited;
+
+            dbContext.SaveChangesAsync();
+
+            return postToUpdate;
+        }
+        public async Task<Post> DeletePostAsync(int postId)
+        {
+            var postToDelete = await dbContext.Posts.SingleOrDefaultAsync(p => p.Id == postId);
+            
+            if (postToDelete == null)
+            {
+                return null;
+            }
+
+            dbContext.Posts.Remove(postToDelete);
+
+            await dbContext.SaveChangesAsync();
+            return postToDelete;
         }
     }
 }
