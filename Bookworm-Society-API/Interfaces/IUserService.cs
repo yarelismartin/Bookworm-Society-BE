@@ -8,6 +8,7 @@ namespace Bookworm_Society_API.Interfaces
     {
         Task<Result<User>> GetUserByIdAsync(int userId);
         Task<Result<User>> CreateUserAsync(User user);
+        Task<Result<User>> UpdateUserAsync(User user, int userId);
     }
 
 }

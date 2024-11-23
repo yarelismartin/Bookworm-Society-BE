@@ -31,6 +31,18 @@ namespace Bookworm_Society_API.Endpoints
                 }
                 return Results.Ok(result.Data);
             });
+
+            group.MapPatch("/{userId}", async (IUserService userService, User user, int userId) =>
+            {
+                var result = await userService.UpdateUserAsync(user, userId);
+
+                if(result.ErrorType == ErrorType.NotFound)
+                {
+                    return Results.NotFound(result.Message);
+                }
+                return Results.Ok(result.Data);
+
+            });
         }
     }
 }

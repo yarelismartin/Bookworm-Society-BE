@@ -36,5 +36,20 @@ namespace Bookworm_Society_API.Repositories
             await dbContext.SaveChangesAsync();
             return user;
         }
+
+        public async Task<User> UpdateUserAsync(User user, int userId)
+        {
+            var userToUpdate = await dbContext.Users.SingleOrDefaultAsync(u => u.Id == userId);
+
+            userToUpdate.FirstName = user.FirstName;
+            userToUpdate.LastName = user.LastName;
+            userToUpdate.Username = user.Username;
+            userToUpdate.ImageUrl = user.ImageUrl;
+
+            await dbContext.SaveChangesAsync();
+            return userToUpdate;
+
+
+        }
     }
 }
