@@ -35,7 +35,7 @@ namespace Bookworm_Society_API.Services
             }
             if (!await _baseRepository.BookExistsAsync(bookClub.BookId))
             {
-                return Result<BookClub>.FailureResult($"Not book was found with the following id: {bookClub.HostId}", ErrorType.NotFound);
+                return Result<BookClub>.FailureResult($"Not book was found with the following id: {bookClub.BookId}", ErrorType.NotFound);
             }
 
 
