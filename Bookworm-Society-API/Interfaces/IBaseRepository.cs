@@ -6,7 +6,7 @@ namespace Bookworm_Society_API.Interfaces
     {
         Task<bool> UserExistsAsync(int userId);
         Task<bool> BookExistsAsync(int bookId);
-
+        Task<bool> BookClubExistsAsync(int bookClubId);
         Task<BookClub?> GetSingleBookClubAsync(int bookClubId);
     }
 }
