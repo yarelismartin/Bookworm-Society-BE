@@ -9,5 +9,6 @@ namespace Bookworm_Society_API.Interfaces
         Task<Post> CreatePostAsync(Post post);
         Task<Post> UpdatePostAsync(Post post, int postId);
         Task<Post> DeletePostAsync(int postId);
+        Task<bool> IsUserAllowedToPost(int bookClubId, int userId);
     }
 }
