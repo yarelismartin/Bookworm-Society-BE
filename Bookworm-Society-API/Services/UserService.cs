@@ -25,5 +25,29 @@ namespace Bookworm_Society_API.Services
             return Result<User>.SuccessResult(user);
 
         }
+
+        public async Task<Result<User>> CreateUserAsync(User user)
+        {
+            if(await _userRepository.UserUidAlreadyInUseAsync(user.Uid))
+            {
+                return Result<User>.FailureResult($"The following uid is already in use: {user.Uid}", ErrorType.Conflict);
+            }
+
+            User userObject = new()
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                ImageUrl = user.ImageUrl,
+                Username = user.Username,
+                Uid = user.Uid,
+
+            };
+
+            var newUser = await _userRepository.CreateUserAsync(userObject);
+
+            return Result<User>.SuccessResult(newUser);
+
+
+        }
     }
 }

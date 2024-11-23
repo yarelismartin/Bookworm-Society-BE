@@ -20,6 +20,17 @@ namespace Bookworm_Society_API.Endpoints
                 }
                 return Results.Ok(result.Data);
             });
+
+            group.MapPost("/", async (IUserService userService, User user) =>
+            {
+                var result = await userService.CreateUserAsync(user);
+
+                if (result.ErrorType == ErrorType.Conflict)
+                {
+                    return Results.Conflict(result.Message);
+                }
+                return Results.Ok(result.Data);
+            });
         }
     }
 }

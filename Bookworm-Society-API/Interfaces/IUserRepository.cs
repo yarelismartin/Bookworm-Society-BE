@@ -6,6 +6,8 @@ namespace Bookworm_Society_API.Interfaces
 
     {
         Task<User?> GetUserByIdAsync(int userId);
+        Task<bool> UserUidAlreadyInUseAsync(string userUid);
+        Task<User> CreateUserAsync(User user);
     }
 
 }

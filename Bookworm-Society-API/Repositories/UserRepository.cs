@@ -2,6 +2,7 @@
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Bookworm_Society_API.Repositories
 {
@@ -22,6 +23,17 @@ namespace Bookworm_Society_API.Repositories
             {
                 return null;
             }
+            return user;
+        }
+
+        public async Task<bool> UserUidAlreadyInUseAsync(string userUid)
+        {
+            return await dbContext.Users.AnyAsync(u => u.Uid == userUid);
+        }
+        public async Task<User> CreateUserAsync(User user)
+        {
+            await dbContext.Users.AddAsync(user);
+            await dbContext.SaveChangesAsync();
             return user;
         }
     }
