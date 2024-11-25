@@ -43,6 +43,28 @@ namespace Bookworm_Society_API.Endpoints
                 return Results.Ok(result.Data);
 
             });
+
+            group.MapGet("/checkUser/{uid}", async (IUserService userService, string uid) =>
+            {
+                var result = await userService.CheckUserAsync(uid);
+
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return Results.NotFound(result.Message);
+                }
+                return Results.Ok(result.Data);
+            });
+
+            group.MapGet("/myClubs", async (IUserService userService, int userId) =>
+            {
+                var result = await userService.GetUsersClubs(userId);
+
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return Results.NotFound(result.Message);
+                }
+                return Results.Ok(result.Data);
+            });
         }
     }
 }

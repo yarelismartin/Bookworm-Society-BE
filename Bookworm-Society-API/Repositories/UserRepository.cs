@@ -51,5 +51,26 @@ namespace Bookworm_Society_API.Repositories
 
 
         }
+        public async Task<User?> CheckUserAsync(string userUid)
+        {
+            var user =  await dbContext.Users.FirstOrDefaultAsync(u => u.Uid == userUid);
+
+            if (user == null) 
+            { 
+                return null;
+            } 
+
+            return user;
+        }
+
+        public async Task<User?> GetUsersClubs(int userId)
+        {
+            return await dbContext.Users
+                .Include(u => u.MemberBookClubs)
+                .Include(u => u.HostedBookClubs)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+        }
+
     }
 }
