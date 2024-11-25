@@ -46,7 +46,7 @@ namespace Bookworm_Society_API.Services
                 bookClub.ImageUrl,
                 bookClub.DateCreated,
                 Host = new UserDTO(bookClub.Host),
-                Book = new BookDTO(bookClub.Book),
+                Book = bookClub.Book != null ? new BookDTO(bookClub.Book) : null ,
                 Members = bookClub.Members?.Select(member => new UserDTO(member)).ToList(),
                 isMemberOrHost = bookClub.Members.Any(m => m.Id == userId) || bookClub.Host.Id == userId,
             };
