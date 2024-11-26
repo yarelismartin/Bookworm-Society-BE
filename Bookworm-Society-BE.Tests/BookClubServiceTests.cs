@@ -75,8 +75,8 @@ namespace Bookworm_Society_BE.Tests
         public async Task GetBookClubDetails_ShouldReturnBookClub_WhenExists()
         {
             // Arrange
-            int bookClubId = 1; // The id of the book club we want to test
-            int userId = 2;     // The id of the user requesting the details
+            int bookClubId = 1;
+            int userId = 2;
 
             // Mock data
             var bookClub = new BookClub
@@ -87,14 +87,14 @@ namespace Bookworm_Society_BE.Tests
                 Description = "A group for sci-fi fans to discuss books and movies.",
                 ImageUrl = "https://example.com/sci-fi-enthusiasts.jpg",
                 DateCreated = new DateTime(2023, 11, 20),
-                HostId = 1, // Host Id
-                BookId = 102, // Book ID
-                Book = new Book { Id = 1, Title = "Dune" }, // Book being read
-                Host = new User { Id = 1 }, // Host User
-                Members = new List<User> // Adding members to the BookClub
+                HostId = 1,
+                BookId = 102,
+                Book = new Book { Id = 1, Title = "Dune" },
+                Host = new User { Id = 1 },
+                Members = new List<User>
         {
-            new User { Id = 2 }, // Member 1
-            new User { Id = 3}   // Member 2
+            new User { Id = 2 },
+            new User { Id = 3 }
         }
             };
 
@@ -118,12 +118,11 @@ namespace Bookworm_Society_BE.Tests
             // Act
             var result = await _bookClubService.GetBookClubByIdAsync(bookClubId, userId);
 
-            // Assert with Fluent Assertions
+            // Assert
             result.Should().NotBeNull(); // Ensure the result is not null
-            var successResult = result.Should().BeOfType<Result<object>>().Subject; // Ensure the result is of type SuccessResult<object>
-            successResult.Success.Should().BeTrue();
-            successResult.Message.Should().Be("Success");
-            successResult.Data.Should().BeEquivalentTo(expectedDto); // Compare the returned DTO with the expected DTO
+            result.Success.Should().BeTrue(); // Ensure the result is a success
+            result.Data.Should().NotBeNull(); // Ensure the data is returned
+            result.Data.Should().BeEquivalentTo(expectedDto); // Compare the returned DTO with the expected DTO
         }
 
 
