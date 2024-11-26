@@ -72,9 +72,9 @@ namespace Bookworm_Society_API.Services
                 HostId = bookClub.HostId,
             };
 
-            var createdBook = await _bookClubRepository.CreateBookClubAsync(newBookClub);
-
-            return Result<BookClub>.SuccessResult(createdBook);
+            var createdBookClub = await _bookClubRepository.CreateBookClubAsync(newBookClub);
+            Console.WriteLine($"Created BookClub: {createdBookClub?.Name}");
+            return Result<BookClub>.SuccessResult(createdBookClub);
         }
         public async Task<Result<BookClub>> UpdateBookClubAsync(BookClub bookClub, int bookClubId)
         {
