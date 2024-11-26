@@ -72,9 +72,9 @@ namespace Bookworm_Society_API.Services
                 HostId = bookClub.HostId,
             };
 
-            var createdBook = await _bookClubRepository.CreateBookClubAsync(newBookClub);
-
-            return Result<BookClub>.SuccessResult(createdBook);
+            var createdBookClub = await _bookClubRepository.CreateBookClubAsync(newBookClub);
+            Console.WriteLine($"Created BookClub: {createdBookClub?.Name}");
+            return Result<BookClub>.SuccessResult(createdBookClub);
         }
         public async Task<Result<BookClub>> UpdateBookClubAsync(BookClub bookClub, int bookClubId)
         {
@@ -101,7 +101,6 @@ namespace Bookworm_Society_API.Services
             };
             return Result<BookClub>.SuccessResult(bookClubToDelete);
         }
-
         public async Task<Result<object>> GetABookClubHaveReadAsync(int bookClubId)
         {
             var bookclub = await _bookClubRepository.GetABookClubHaveReadAsync(bookClubId);
@@ -119,7 +118,6 @@ namespace Bookworm_Society_API.Services
 
             return Result<object>.SuccessResult(bookObj);
         }
-
         public async Task<Result<object>> GetABookClubPostAsync(int bookClubId)
         {
             var bookclub = await _bookClubRepository.GetABookClubHavePostAsync(bookClubId);
