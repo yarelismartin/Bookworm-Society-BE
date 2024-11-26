@@ -101,7 +101,6 @@ namespace Bookworm_Society_API.Services
             };
             return Result<BookClub>.SuccessResult(bookClubToDelete);
         }
-
         public async Task<Result<object>> GetABookClubHaveReadAsync(int bookClubId)
         {
             var bookclub = await _bookClubRepository.GetABookClubHaveReadAsync(bookClubId);
@@ -119,7 +118,6 @@ namespace Bookworm_Society_API.Services
 
             return Result<object>.SuccessResult(bookObj);
         }
-
         public async Task<Result<object>> GetABookClubPostAsync(int bookClubId)
         {
             var bookclub = await _bookClubRepository.GetABookClubHavePostAsync(bookClubId);
