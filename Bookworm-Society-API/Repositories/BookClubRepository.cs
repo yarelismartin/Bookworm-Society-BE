@@ -76,5 +76,62 @@ namespace Bookworm_Society_API.Repositories
                 return bookClubToDelete;
             }
 
+        public async Task<BookClub> GetABookClubHaveReadAsync(int bookClubId)
+        {
+            var bookClub = await dbContext.BookClubs
+                .Include(bc => bc.HaveRead)
+                .SingleOrDefaultAsync(bc => bc.Id == bookClubId);
+
+            if (bookClub == null)
+            {
+                return null;
+            }
+
+            return bookClub;
+        }
+        public async Task<BookClub> GetABookClubHavePostAsync(int bookClubId)
+        {
+            var bookClub = await dbContext.BookClubs
+                .Include(bc => bc.Posts)
+                .ThenInclude(p => p.User)
+                .SingleOrDefaultAsync(bc => bc.Id == bookClubId);
+
+            if (bookClub == null)
+            {
+                return null;
+            }
+
+            bookClub.Posts = bookClub.Posts?.OrderByDescending(post => post.CreatedDate ).ToList();
+
+            return bookClub;
+        }
+
+        public async Task<BookClub?> GetBookClubWithMembersAsync(int bookClubId)
+        {
+            return await dbContext.BookClubs
+                .Include(bc => bc.Members)
+                .SingleOrDefaultAsync(bc => bc.Id == bookClubId);
+        }
+
+        public async Task<BookClub> AddUserToBookClubAsync( BookClub bookClub, int userId)
+        {
+            var user = await dbContext.Users.SingleOrDefaultAsync(u => u.Id  == userId);
+
+            bookClub.Members?.Add(user);   
+            await dbContext.SaveChangesAsync();
+
+            return bookClub;
+
+        }
+        public async Task<BookClub> RemoveUserFromBookClubAsync(BookClub bookClub, int userId)
+        {
+            var user = await dbContext.Users.SingleOrDefaultAsync(u => u.Id == userId);
+
+            bookClub.Members?.Remove(user);
+            await dbContext.SaveChangesAsync();
+
+            return bookClub;
+        }
+
     }
 }
