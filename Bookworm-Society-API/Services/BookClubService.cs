@@ -4,6 +4,7 @@ using Bookworm_Society_API.Models;
 using Bookworm_Society_API.DTOs;
 using Bookworm_Society_API.Repositories;
 using Bookworm_Society_API.Result;
+using System.Linq;
 
 namespace Bookworm_Society_API.Services
 {
@@ -99,6 +100,127 @@ namespace Bookworm_Society_API.Services
                 return Result<BookClub>.FailureResult($"No book club was found with the following id: {bookClubId}", ErrorType.NotFound);
             };
             return Result<BookClub>.SuccessResult(bookClubToDelete);
+        }
+
+        public async Task<Result<object>> GetABookClubHaveReadAsync(int bookClubId)
+        {
+            var bookclub = await _bookClubRepository.GetABookClubHaveReadAsync(bookClubId);
+
+            if (bookclub == null)
+            {
+                return Result<object>.FailureResult($"No book club was found with the following id: {bookClubId}", ErrorType.NotFound);
+            };
+
+            var bookObj = new
+            {
+                bookclub.Id,
+                HaveRead = bookclub.HaveRead?.Select(hr => new BookDTO(hr)).ToList(),
+            };
+
+            return Result<object>.SuccessResult(bookObj);
+        }
+
+        public async Task<Result<object>> GetABookClubPostAsync(int bookClubId)
+        {
+            var bookclub = await _bookClubRepository.GetABookClubHavePostAsync(bookClubId);
+
+            if (bookclub == null)
+            {
+                return Result<object>.FailureResult($"No book club was found with the following id: {bookClubId}", ErrorType.NotFound);
+            };
+
+            var bookObj = new
+            {
+                bookclub.Id,
+                Posts = bookclub.Posts?
+                .Select(p => new 
+                {
+                    p.Id, 
+                    p.Content, 
+                    p.CreatedDate, 
+                    p.IsPinned,
+                    p.IsEdited, 
+                    User = new UserDTO(p.User),
+                }).ToList(),
+            };
+
+            return Result<object>.SuccessResult(bookObj);
+
+        }
+        public async Task<Result<object>> AddUserToBookClubAsync(int bookClubId, int userId)
+        {
+            if (!await _baseRepository.UserExistsAsync(userId))
+            {
+                return Result<object>.FailureResult($"Not user was found with the following id: {userId}", ErrorType.NotFound);
+            }
+
+            if (!await _baseRepository.BookClubExistsAsync(bookClubId))
+            {
+                return Result<object>.FailureResult($"Not book club was found with the following id: {bookClubId}", ErrorType.NotFound);
+            }
+
+
+
+            var bookclub = await _bookClubRepository.GetBookClubWithMembersAsync(bookClubId);
+
+            bool isMember = bookclub.Members?.Any(member => member.Id == userId) == true;
+            bool isHost = bookclub.HostId == userId;
+
+            if (isMember || isHost)
+            {
+                string message = isMember
+                    ? "This user is already a member of this club."
+                    : "This user is already the host of this club.";
+
+                return Result<object>.FailureResult(message, ErrorType.Conflict);
+            }
+
+            var addMember = await _bookClubRepository.AddUserToBookClubAsync(bookclub, userId);
+
+            var currentMembers = new
+            {
+                addMember.Id,
+                Members = addMember.Members?.Select(m => new UserDTO(m)).ToList(),
+            };
+
+            return Result<object>.SuccessResult(currentMembers);
+
+        }
+        public async Task<Result<object>> RemoveUserFromBookClubAsync( int bookClubId, int userId)
+        {
+            if (!await _baseRepository.UserExistsAsync(userId))
+            {
+                return Result<object>.FailureResult($"Not user was found with the following id: {userId}", ErrorType.NotFound);
+            }
+
+            if (!await _baseRepository.BookClubExistsAsync(bookClubId))
+            {
+                return Result<object>.FailureResult($"Not book club was found with the following id: {bookClubId}", ErrorType.NotFound);
+            }
+
+
+
+            var bookclub = await _bookClubRepository.GetBookClubWithMembersAsync(bookClubId);
+
+            if (bookclub.HostId == userId)
+            {
+                return Result<object>.FailureResult("The host cannot be removed from the book club.", ErrorType.Conflict);
+            }
+
+            if (bookclub.Members?.Any(member => member.Id == userId) == false)
+            {
+                return Result<object>.FailureResult($"This user is not a member of this club.", ErrorType.Conflict);
+            }
+
+            var addMember = await _bookClubRepository.RemoveUserFromBookClubAsync(bookclub, userId);
+
+            var currentMembers = new
+            {
+                addMember.Id,
+                Members = addMember.Members?.Select(m => new UserDTO(m)).ToList(),
+            };
+
+            return Result<object>.SuccessResult(currentMembers);
         }
 
     }

@@ -69,6 +69,61 @@ namespace Bookworm_Society_API.Endpoints
                 }
                 return Results.Ok(bookToDelete.Data);
             });
+
+            group.MapGet("/have-read", async (IBookClubService bookClubService, int BookClubId) =>
+            {
+                var bookClub = await bookClubService.GetABookClubHaveReadAsync(BookClubId);
+                if (bookClub.ErrorType == ErrorType.NotFound)
+                {
+                    return Results.NotFound(bookClub.Message);
+                }
+                return Results.Ok(bookClub.Data);
+            });
+
+            group.MapGet("/community-posts", async (IBookClubService bookClubService, int bookClubId) =>
+            {
+                var bookClub = await bookClubService.GetABookClubPostAsync(bookClubId);
+                if (bookClub.ErrorType == ErrorType.NotFound)
+                {
+                    return Results.NotFound(bookClub.Message);
+                }
+                return Results.Ok(bookClub.Data);
+            });
+
+            group.MapGet("/{bookClubId}/add-user/{userId}", async (IBookClubService bookClubService, int bookClubId, int userId) =>
+            {
+
+                var bookClub = await bookClubService.AddUserToBookClubAsync(bookClubId, userId);
+                if (bookClub.ErrorType == ErrorType.NotFound)
+                {
+                    return Results.NotFound(bookClub.Message);
+                }
+
+                if (bookClub.ErrorType == ErrorType.Conflict)
+                {
+                    return Results.Conflict(bookClub.Message);
+                }
+
+                return Results.Ok(bookClub.Data);
+
+            });
+
+            group.MapGet("/{bookClubId}/remove-user/{userId}", async (IBookClubService bookClubService, int bookClubId, int userId) =>
+            {
+                var bookClub = await bookClubService.RemoveUserFromBookClubAsync(bookClubId, userId);
+
+                if (bookClub.ErrorType == ErrorType.NotFound)
+                {
+                    return Results.NotFound(bookClub.Message);
+                }
+
+                if (bookClub.ErrorType == ErrorType.Conflict)
+                {
+                    return Results.Conflict(bookClub.Message);
+                }
+
+                return Results.Ok(bookClub.Data);
+            });
         }
     }
 }
