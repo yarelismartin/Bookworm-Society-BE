@@ -7,12 +7,12 @@
         public T? Data { get; set; } // Nullable data
         public ErrorType ErrorType { get; set; }
 
-        public static Result<T> SuccessResult(T data)
+        public static Result<T> SuccessResult(T data, string message = "Success")
         {
             return new Result<T>
             {
                 Success = true,
-                Message = "Success", 
+                Message = message,
                 Data = data,
                 ErrorType = ErrorType.None
             };
