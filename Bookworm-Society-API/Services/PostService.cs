@@ -112,7 +112,7 @@ namespace Bookworm_Society_API.Services
                 return Result<Post>.FailureResult($"No post was found with the following id: {postId}", ErrorType.NotFound);
             }
 
-            return Result<Post>.SuccessResult(postToDelete);
+            return Result<Post>.SuccessResult(null);
         }
     }
 }

@@ -49,7 +49,7 @@ namespace Bookworm_Society_API.Services
                 return Result<Comment>.FailureResult($"No comemnt was found with the following id: {commentId}", ErrorType.NotFound);
             }
 
-            return Result<Comment>.SuccessResult(commentToDelete);  
+            return Result<Comment>.SuccessResult(null);  
 
         }
     }

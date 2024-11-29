@@ -22,13 +22,13 @@ namespace Bookworm_Society_API.Services
         {
             if (!await _baseRepository.UserExistsAsync(review.UserId))
             {
-                return Result<Review>.FailureResult($"Not user was found with the following id: {review.UserId}", ErrorType.NotFound);
+                return Result<Review>.FailureResult($"No user was found with the following id: {review.UserId}", ErrorType.NotFound);
             }
             if (!await _baseRepository.BookExistsAsync(review.BookId))
             {
-                return Result<Review>.FailureResult($"Not book was found with the following id: {review.BookId}", ErrorType.NotFound);
+                return Result<Review>.FailureResult($"No book was found with the following id: {review.BookId}", ErrorType.NotFound);
             }
-            if(review.Rating <= 0 || review.Rating >= 5)
+            if(review.Rating < 1 || review.Rating > 5)
             {
                 return Result<Review>.FailureResult($"The rating should be between 1 and 5.", ErrorType.Conflict);
             }
@@ -41,8 +41,8 @@ namespace Bookworm_Society_API.Services
                 BookId = review.BookId
             };
 
-            var newBook = await _reviewRepository.CreateReviewAsync(reviewObj);
-            return Result<Review>.SuccessResult(newBook);
+            var newReview = await _reviewRepository.CreateReviewAsync(reviewObj);
+            return Result<Review>.SuccessResult(newReview);
         }
         public async Task<Result<Review>> UpdateReviewAsync(Review review, int reviewId)
         {
@@ -68,7 +68,7 @@ namespace Bookworm_Society_API.Services
                 return Result<Review>.FailureResult($"No review found with the following id: {reviewId}", ErrorType.NotFound);
             }
 
-            return Result<Review>.SuccessResult(reviewToDelete);
+            return Result<Review>.SuccessResult(null);
 
         }
     }

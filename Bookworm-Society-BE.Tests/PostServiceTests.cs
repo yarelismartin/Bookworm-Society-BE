@@ -1,3 +1,4 @@
+using Bookworm_Society_API.DTOs;
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Bookworm_Society_API.Services;
@@ -77,9 +78,9 @@ namespace Bookworm_Society_BE.Tests
             var result = await _postService.GetPostByIdAsync(postId);
 
             // Assert
-            result.Should().NotBeNull(); // Ensure the result is not null
-            result.Success.Should().BeTrue(); // Ensure the result is a success
-            result.Data.Should().NotBeNull(); // Ensure the data is returned
+            result.Should().NotBeNull();
+            result.Success.Should().BeTrue();
+            result.Data.Should().NotBeNull();
         }
 
         [Fact]
@@ -90,15 +91,22 @@ namespace Bookworm_Society_BE.Tests
             var userId = 1;
             var bookClubId = 1;
 
+            var createPostDto = new CreatePostDto
+            {
+                Content = "This is a test post",
+                BookClubId = bookClubId,
+                UserId = userId
+            };
+
             var post = new Post
             {
                 Id = postId,
-                Content = "This is a test post",
+                Content = createPostDto.Content,
                 CreatedDate = DateTime.Now,
                 IsPinned = false,
                 IsEdited = false,
-                BookClubId = bookClubId,
-                UserId = userId
+                BookClubId = createPostDto.BookClubId,
+                UserId = createPostDto.UserId
             };
 
             var existingUser = new User { Id = userId };
@@ -111,12 +119,12 @@ namespace Bookworm_Society_BE.Tests
             _mockPostRepository.Setup(repo => repo.CreatePostAsync(It.IsAny<Post>())).ReturnsAsync(post);
 
             // Act
-            var result = await _postService.CreatePostAsync(post);
+            var result = await _postService.CreatePostAsync(createPostDto);
 
             // Assert
-            result.Should().NotBeNull(); // Ensure the result is not null
-            result.Success.Should().BeTrue(); // Ensure the result is a success
-            result.Data.Should().NotBeNull(); // Ensure the data is returned
+            result.Should().NotBeNull();
+            result.Success.Should().BeTrue();
+            result.Data.Should().NotBeNull();
         }
 
         [Fact]
@@ -155,9 +163,9 @@ namespace Bookworm_Society_BE.Tests
             var result = await _postService.UpdatePostAsync(post, postId);
 
             // Assert
-            result.Should().NotBeNull(); // Ensure the result is not null
-            result.Success.Should().BeTrue(); // Ensure the result is a success
-            result.Data.Should().NotBeNull(); // Ensure the data is returned
+            result.Should().NotBeNull();
+            result.Success.Should().BeTrue();
+            result.Data.Should().NotBeNull();
 
 
         }
@@ -179,15 +187,15 @@ namespace Bookworm_Society_BE.Tests
 
             // Mock the repository method to return the post to be deleted
             _mockPostRepository.Setup(repo => repo.DeletePostAsync(postId))
-                .ReturnsAsync(postToDelete); // Mock the deletion returning the post
+                .ReturnsAsync(postToDelete);
 
             // Act
             var result = await _postService.DeletePostAsync(postId);
 
             // Assert
-            result.Should().NotBeNull(); // Ensure the result is not null
-            result.Success.Should().BeTrue(); // Ensure the result is a success
-            result.Data.Should().NotBeNull(); // Ensure the deleted post is returned
+            result.Should().NotBeNull();
+            result.Success.Should().BeTrue();
+            result.Data.Should().BeNull();
         }
 
     }

@@ -61,7 +61,7 @@ namespace Bookworm_Society_API.Endpoints
                     return Results.NotFound(result.Message);
                 }
 
-                return Results.Ok(result.Data);
+                return Results.NoContent();
             });
         }
     }

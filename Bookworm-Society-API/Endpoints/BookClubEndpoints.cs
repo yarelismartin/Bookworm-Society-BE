@@ -67,7 +67,7 @@ namespace Bookworm_Society_API.Endpoints
                 {
                     return Results.NotFound(bookToDelete.Message);
                 }
-                return Results.Ok(bookToDelete.Data);
+                return Results.NoContent();
             });
 
             group.MapGet("/have-read", async (IBookClubService bookClubService, int BookClubId) =>

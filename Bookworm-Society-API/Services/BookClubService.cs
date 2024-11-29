@@ -99,7 +99,7 @@ namespace Bookworm_Society_API.Services
             {
                 return Result<BookClub>.FailureResult($"No book club was found with the following id: {bookClubId}", ErrorType.NotFound);
             };
-            return Result<BookClub>.SuccessResult(bookClubToDelete);
+            return Result<BookClub>.SuccessResult(null);
         }
         public async Task<Result<object>> GetABookClubHaveReadAsync(int bookClubId)
         {

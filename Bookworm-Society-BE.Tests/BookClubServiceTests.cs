@@ -160,9 +160,9 @@ namespace Bookworm_Society_BE.Tests
             var result = await _bookClubService.CreateBookClubAsync(bookClubToCreate);
 
             // Assert with Fluent Assertions
-            result.Should().NotBeNull(); // Ensure the result is not null
-            result.Success.Should().BeTrue(); // Ensure the result is a success
-            result.Data.Should().NotBeNull(); // Ensure the Data property is not null
+            result.Should().NotBeNull(); 
+            result.Success.Should().BeTrue(); 
+            result.Data.Should().NotBeNull(); 
         }
 
         [Fact]
@@ -202,22 +202,22 @@ namespace Bookworm_Society_BE.Tests
 
             // Mock the repository methods
             _mockBaseRepository.Setup(repo => repo.UserExistsAsync(bookClubToUpdate.HostId))
-                .ReturnsAsync(true); // Simulate that the host exists
+                .ReturnsAsync(true);
 
             _mockBookClubRepository.Setup(repo => repo.UpdateBookClubAsync(bookClubToUpdate, bookClubId))
-                .ReturnsAsync(updatedBookClub); // Return the updated book club
+                .ReturnsAsync(updatedBookClub);
 
             // Act
             var result = await _bookClubService.UpdateBookClubAsync(bookClubToUpdate, bookClubId);
 
             // Assert with Fluent Assertions
-            result.Should().NotBeNull(); // Ensure result is not null
-            result.Success.Should().BeTrue(); // Ensure the result is a success
-            result.Data.Should().NotBeNull(); // Ensure Data property is not null
+            result.Should().NotBeNull(); 
+            result.Success.Should().BeTrue();
+            result.Data.Should().NotBeNull(); 
         }
 
         [Fact]
-        public async Task DeleteeBookClub_ShouldReturnTheDeletedBookClub_WhenDeleteIsSuccessful()
+        public async Task DeleteeBookClub_ShouldReturnNoContent_WhenDeleteIsSuccessful()
         {
             // Arrange
             var bookClubId = 1;
@@ -234,15 +234,15 @@ namespace Bookworm_Society_BE.Tests
 
             // Mock the repository method for deleting the book club
             _mockBookClubRepository.Setup(repo => repo.DeleteBookClubAsync(bookClubId))
-                .ReturnsAsync(bookClubToDelete); // Return the deleted book club
+                .ReturnsAsync(bookClubToDelete); 
 
             // Act
             var result = await _bookClubService.DeleteBookClubAsync(bookClubId);
 
             // Assert with Fluent Assertions
-            result.Should().NotBeNull(); // Ensure result is not null
-            result.Success.Should().BeTrue(); // Ensure the result is a success
-            result.Data.Should().NotBeNull(); // Ensure the Data property is not null
+            result.Should().NotBeNull(); 
+            result.Success.Should().BeTrue();
+            result.Data.Should().BeNull();
         }
 
     }

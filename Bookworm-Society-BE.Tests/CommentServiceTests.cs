@@ -71,28 +71,28 @@ namespace Bookworm_Society_BE.Tests
         public async Task DeleteComment_ShouldReturnTheDeletedComment_WhenDeleteIsSuccessful()
         {
             // Arrange
-            var commentIdToDelete = 1; // ID of the comment to delete
+            var commentIdToDelete = 1; 
 
             var commentToDelete = new Comment
             {
                 Id = commentIdToDelete,
                 Content = "This is a comment to be deleted",
-                PostId = 1, // Assuming an existing PostId
-                UserId = 2, // Assuming an existing UserId
+                PostId = 1, 
+                UserId = 2, 
                 CreatedDate = DateTime.Now
             };
 
             // Mock the repository method
             _mockCommentRepository.Setup(repo => repo.DeleteCommentAsync(commentIdToDelete))
-                .ReturnsAsync(commentToDelete); // Simulate that the comment is deleted and returned
+                .ReturnsAsync(commentToDelete); 
 
             // Act
             var result = await _commentService.DeleteCommentAsync(commentIdToDelete);
 
             // Assert with Fluent Assertions
-            result.Should().NotBeNull(); // Ensure the result is not null
-            result.Success.Should().BeTrue(); // Ensure the result is a success
-            result.Data.Should().NotBeNull(); // Ensure the Data property is not null
+            result.Should().NotBeNull();
+            result.Success.Should().BeTrue(); 
+            result.Data.Should().BeNull();
 
         }
     }
