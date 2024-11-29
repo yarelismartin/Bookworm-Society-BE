@@ -1,4 +1,5 @@
-﻿using Bookworm_Society_API.Interfaces;
+﻿using Bookworm_Society_API.DTOs;
+using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Bookworm_Society_API.Result;
 using Microsoft.Extensions.Hosting;
@@ -23,9 +24,9 @@ namespace Bookworm_Society_API.Endpoints
                 return Results.Ok(post.Data);
             });
 
-            group.MapPost("/", async (IPostService postService, Post post) =>
+            group.MapPost("/", async (IPostService postService, CreatePostDto postDtot) =>
             {
-                var result = await postService.CreatePostAsync(post);
+                var result = await postService.CreatePostAsync(postDtot);
 
                 if (result.ErrorType == ErrorType.NotFound)
                 {

@@ -28,7 +28,7 @@ namespace Bookworm_Society_API.Services
             {
                 return Result<Review>.FailureResult($"Not book was found with the following id: {review.BookId}", ErrorType.NotFound);
             }
-            if(review.Rating <= 0 || review.Rating > 5)
+            if(review.Rating <= 0 || review.Rating >= 5)
             {
                 return Result<Review>.FailureResult($"The rating should be between 1 and 5.", ErrorType.Conflict);
             }

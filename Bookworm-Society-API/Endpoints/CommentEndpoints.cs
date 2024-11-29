@@ -21,7 +21,11 @@ namespace Bookworm_Society_API.Endpoints
                 }
 
                 return Results.Ok(result.Data);
-            });
+            })
+            .WithName("CreateComment")
+            .WithOpenApi()
+            .Produces(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound);
 
             group.MapDelete("/{commentId}", async (ICommentService commentService, int commentId) =>
             {

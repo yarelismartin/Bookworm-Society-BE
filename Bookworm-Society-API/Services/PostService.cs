@@ -53,31 +53,40 @@ namespace Bookworm_Society_API.Services
 
         }
         //Create post
-        public async Task<Result<Post>> CreatePostAsync(Post post)
+        public async Task<Result<Post>> CreatePostAsync(CreatePostDto postDto)
         {
-            if(!await _baseRepository.UserExistsAsync(post.UserId))
+            if (!await _baseRepository.UserExistsAsync(postDto.UserId))
             {
-                return Result<Post>.FailureResult($"No user exist with the following id: {post.UserId}", ErrorType.NotFound);
+                return Result<Post>.FailureResult(
+                    $"No user exists with the following ID: {postDto.UserId}",
+                    ErrorType.NotFound
+                );
             }
-            if (!await _baseRepository.BookClubExistsAsync(post.BookClubId))
+            if (!await _baseRepository.BookClubExistsAsync(postDto.BookClubId))
             {
-                return Result<Post>.FailureResult($"No book club exist with the following id: {post.BookClubId}", ErrorType.NotFound);
+                return Result<Post>.FailureResult(
+                    $"No book club exists with the following ID: {postDto.BookClubId}",
+                    ErrorType.NotFound
+                );
             }
-            if (!await _postRepository.IsUserAllowedToPost(post.BookClubId, post.UserId))
+            if (!await _postRepository.IsUserAllowedToPost(postDto.BookClubId, postDto.UserId))
             {
-                return Result<Post>.FailureResult("User is not a member or host of this book club.", ErrorType.Conflict);
+                return Result<Post>.FailureResult(
+                    "User is not a member or host of this book club.",
+                    ErrorType.Conflict
+                );
             }
 
-            Post postObj = new()
+            Post post = new()
             {
-                Content = post.Content,
-                IsPinned = false,
-                IsEdited = false,
-                BookClubId = post.BookClubId,
-                UserId = post.UserId
+                Content = postDto.Content,
+                IsPinned = false, 
+                IsEdited = false, 
+                BookClubId = postDto.BookClubId,
+                UserId = postDto.UserId
             };
 
-            var newPost = await _postRepository.CreatePostAsync(postObj);
+            var newPost = await _postRepository.CreatePostAsync(post);
             return Result<Post>.SuccessResult(newPost);
         }
         //Update post 
