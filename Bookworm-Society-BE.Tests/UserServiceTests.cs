@@ -1,3 +1,4 @@
+using Bookworm_Society_API.DTOs;
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Bookworm_Society_API.Services;
@@ -57,7 +58,7 @@ namespace Bookworm_Society_BE.Tests
         public async Task AddUser_ShouldReturnUser_WhenAddedIsSuccessful()
         {
             // Arrange
-            var user = new User
+            var userDto = new CreateUserDTO
             {
                 FirstName = "Jane",
                 LastName = "Doe",
@@ -66,19 +67,30 @@ namespace Bookworm_Society_BE.Tests
                 Uid = "newuseruid123"
             };
 
-            // Mock the repository to simulate UID check and user creation
-            _mockUserRepository.Setup(repo => repo.UserUidAlreadyInUseAsync(user.Uid))
-                .ReturnsAsync(false); // Simulate that the UID is not in use
+            var user = new User
+            {
+                Id = 1,
+                FirstName = userDto.FirstName,
+                LastName = userDto.LastName,
+                ImageUrl = userDto.ImageUrl,
+                Username = userDto.Username,
+                Uid = userDto.Uid
+            };
+
+            var userDetailDto = new UserDetailDTO(user);
+
+            _mockUserRepository.Setup(repo => repo.UserUidAlreadyInUseAsync(userDto.Uid))
+                .ReturnsAsync(false);
             _mockUserRepository.Setup(repo => repo.CreateUserAsync(It.IsAny<User>()))
-                .ReturnsAsync(user); // Simulate the creation of the user
+                .ReturnsAsync(user);
 
             // Act
-            var result = await _userService.CreateUserAsync(user);
+            var result = await _userService.CreateUserAsync(userDto);
 
-            // Assert with Fluent Assertions
-            result.Should().NotBeNull(); // Ensure the result is not null
-            result.Success.Should().BeTrue(); // Ensure the result is a success
-
+            // Assert
+            result.Should().NotBeNull();
+            result.Success.Should().BeTrue();
+            result.Data.Should().BeEquivalentTo(userDetailDto);
 
         }
 

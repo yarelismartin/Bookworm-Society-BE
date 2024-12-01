@@ -78,7 +78,6 @@ namespace Bookworm_Society_BE.Tests
             int bookClubId = 1;
             int userId = 2;
 
-            // Mock data
             var bookClub = new BookClub
             {
                 Id = bookClubId,
@@ -109,6 +108,7 @@ namespace Bookworm_Society_BE.Tests
                 isMemberOrHost = bookClub.Members.Any(m => m.Id == userId) || bookClub.Host.Id == userId,
             };
 
+            // Mock
             _mockBookClubRepository.Setup(repo => repo.GetBookClubByIdAsync(bookClubId))
                 .ReturnsAsync(bookClub);
 
@@ -119,10 +119,10 @@ namespace Bookworm_Society_BE.Tests
             var result = await _bookClubService.GetBookClubByIdAsync(bookClubId, userId);
 
             // Assert
-            result.Should().NotBeNull(); // Ensure the result is not null
-            result.Success.Should().BeTrue(); // Ensure the result is a success
-            result.Data.Should().NotBeNull(); // Ensure the data is returned
-            result.Data.Should().BeEquivalentTo(expectedDto); // Compare the returned DTO with the expected DTO
+            result.Should().NotBeNull();
+            result.Success.Should().BeTrue();
+            result.Data.Should().NotBeNull();
+            result.Data.Should().BeEquivalentTo(expectedDto);
         }
 
 
@@ -130,39 +130,51 @@ namespace Bookworm_Society_BE.Tests
         public async Task AddBookClub_ShouldReturnBookClub_WhenAddedIsSuccessful()
         {
             // Arrange
-            var bookClubToCreate = new BookClub
+            var bookClubToCreate = new CreateBookClubDTO
             {
                 Name = "Sci-Fi Enthusiasts",
                 MeetUpType = "Online",
                 Description = "A group for sci-fi fans to discuss books and movies.",
                 ImageUrl = "https://example.com/sci-fi-enthusiasts.jpg",
-                HostId = 1, // Assume the host exists
+                HostId = 1,
+            };
+
+            var mockHost = new User
+            {
+                Id = 1,
+                FirstName = "John",
+                LastName = "Doe",
+                Username = "johndoe",
+                ImageUrl = "https://example.com/johndoe.jpg",
             };
 
             var createdBookClub = new BookClub
             {
-                Id = 1, // Simulate an auto-generated Id
+                Id = 1,
                 Name = bookClubToCreate.Name,
                 MeetUpType = bookClubToCreate.MeetUpType,
                 Description = bookClubToCreate.Description,
                 ImageUrl = bookClubToCreate.ImageUrl,
-                HostId = bookClubToCreate.HostId
+                HostId = bookClubToCreate.HostId,
+                Host = mockHost,
+                Members = new List<User>(), 
+                DateCreated = DateTime.Now
             };
 
-            // Mock the repository methods
+            // Mock
             _mockBaseRepository.Setup(repo => repo.UserExistsAsync(bookClubToCreate.HostId))
-                .ReturnsAsync(true); // Simulate that the host exists
+                .ReturnsAsync(true);
 
             _mockBookClubRepository.Setup(repo => repo.CreateBookClubAsync(It.IsAny<BookClub>()))
-    .ReturnsAsync(createdBookClub);
+                .ReturnsAsync(createdBookClub);
 
             // Act
             var result = await _bookClubService.CreateBookClubAsync(bookClubToCreate);
 
-            // Assert with Fluent Assertions
-            result.Should().NotBeNull(); // Ensure the result is not null
-            result.Success.Should().BeTrue(); // Ensure the result is a success
-            result.Data.Should().NotBeNull(); // Ensure the Data property is not null
+            // Assert
+            result.Should().NotBeNull();
+            result.Success.Should().BeTrue();
+            result.Data.Should().BeEquivalentTo(new BookClubDetailDTO(createdBookClub, bookClubToCreate.HostId));
         }
 
         [Fact]
@@ -202,22 +214,22 @@ namespace Bookworm_Society_BE.Tests
 
             // Mock the repository methods
             _mockBaseRepository.Setup(repo => repo.UserExistsAsync(bookClubToUpdate.HostId))
-                .ReturnsAsync(true); // Simulate that the host exists
+                .ReturnsAsync(true);
 
             _mockBookClubRepository.Setup(repo => repo.UpdateBookClubAsync(bookClubToUpdate, bookClubId))
-                .ReturnsAsync(updatedBookClub); // Return the updated book club
+                .ReturnsAsync(updatedBookClub);
 
             // Act
             var result = await _bookClubService.UpdateBookClubAsync(bookClubToUpdate, bookClubId);
 
             // Assert with Fluent Assertions
-            result.Should().NotBeNull(); // Ensure result is not null
-            result.Success.Should().BeTrue(); // Ensure the result is a success
-            result.Data.Should().NotBeNull(); // Ensure Data property is not null
+            result.Should().NotBeNull(); 
+            result.Success.Should().BeTrue();
+            result.Data.Should().NotBeNull(); 
         }
 
         [Fact]
-        public async Task DeleteeBookClub_ShouldReturnTheDeletedBookClub_WhenDeleteIsSuccessful()
+        public async Task DeleteeBookClub_ShouldReturnNoContent_WhenDeleteIsSuccessful()
         {
             // Arrange
             var bookClubId = 1;
@@ -234,15 +246,15 @@ namespace Bookworm_Society_BE.Tests
 
             // Mock the repository method for deleting the book club
             _mockBookClubRepository.Setup(repo => repo.DeleteBookClubAsync(bookClubId))
-                .ReturnsAsync(bookClubToDelete); // Return the deleted book club
+                .ReturnsAsync(bookClubToDelete); 
 
             // Act
             var result = await _bookClubService.DeleteBookClubAsync(bookClubId);
 
             // Assert with Fluent Assertions
-            result.Should().NotBeNull(); // Ensure result is not null
-            result.Success.Should().BeTrue(); // Ensure the result is a success
-            result.Data.Should().NotBeNull(); // Ensure the Data property is not null
+            result.Should().NotBeNull(); 
+            result.Success.Should().BeTrue();
+            result.Data.Should().BeNull();
         }
 
     }

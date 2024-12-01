@@ -1,3 +1,4 @@
+using Bookworm_Society_API.DTOs;
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Bookworm_Society_API.Services;
@@ -29,42 +30,41 @@ namespace Bookworm_Society_BE.Tests
         public async Task AddReview_ShouldReturnReview_WhenAddedIsSuccessful()
         {
             // Arrange
-            var reviewToAdd = new Review
+            var createReviewDto = new CreateReviewDTO
             {
                 Content = "Great book! A must-read for all science fiction fans.",
-                Rating = 5, // Valid rating between 1 and 5
-                UserId = 1, // Assume a valid UserId
-                BookId = 1, // Assume a valid BookId
-                CreatedDate = DateTime.Now
+                Rating = 5,
+                UserId = 1,
+                BookId = 1
             };
 
             var createdReview = new Review
             {
-                Id = 1, // Simulating an auto-generated Id
-                Content = reviewToAdd.Content,
-                Rating = reviewToAdd.Rating,
-                UserId = reviewToAdd.UserId,
-                BookId = reviewToAdd.BookId,
-                CreatedDate = reviewToAdd.CreatedDate
+                Id = 1,
+                Content = createReviewDto.Content,
+                Rating = createReviewDto.Rating,
+                UserId = createReviewDto.UserId,
+                BookId = createReviewDto.BookId,
+                CreatedDate = DateTime.Now
             };
 
             // Mock the repository methods
-            _mockBaseRepository.Setup(repo => repo.UserExistsAsync(reviewToAdd.UserId))
-                .ReturnsAsync(true); // Simulate that the user exists
+            _mockBaseRepository.Setup(repo => repo.UserExistsAsync(createReviewDto.UserId))
+                .ReturnsAsync(true);
 
-            _mockBaseRepository.Setup(repo => repo.BookExistsAsync(reviewToAdd.BookId))
-                .ReturnsAsync(true); // Simulate that the book exists
+            _mockBaseRepository.Setup(repo => repo.BookExistsAsync(createReviewDto.BookId))
+                .ReturnsAsync(true);
 
             _mockReviewRepository.Setup(repo => repo.CreateReviewAsync(It.IsAny<Review>()))
-                .ReturnsAsync(createdReview); // Simulate creating the review and returning it
+                .ReturnsAsync(createdReview);
 
             // Act
-            var result = await _reviewService.CreateReviewAsync(reviewToAdd);
+            var result = await _reviewService.CreateReviewAsync(createReviewDto);
 
-            // Assert with Fluent Assertions
-            result.Should().NotBeNull(); // Ensure the result is not null
-            result.Success.Should().BeTrue(); // Ensure the result is a success
-            result.Data.Should().NotBeNull(); // Ensure the Data property is not null
+            // Assert
+            result.Should().NotBeNull();
+            result.Success.Should().BeTrue();
+            result.Data.Should().NotBeNull();
         }
 
         [Fact]
@@ -119,11 +119,11 @@ namespace Bookworm_Society_BE.Tests
         public async Task DeleteReview_ShouldReturnTheDeletedReview_WhenDeleteIsSuccessful()
         {
             // Arrange
-            var reviewId = 1; // The review ID to delete
+            var reviewId = 1; 
 
             var existingReview = new Review
             {
-                Id = reviewId, // The review to delete
+                Id = reviewId,
                 Content = "This book was amazing! Highly recommended.",
                 Rating = 5,
                 UserId = 1,
@@ -133,15 +133,15 @@ namespace Bookworm_Society_BE.Tests
 
             // Mock the repository methods to simulate deleting the review
             _mockReviewRepository.Setup(repo => repo.DeleteReviewAsync(reviewId))
-                .ReturnsAsync(existingReview); // Simulate the review being deleted
+                .ReturnsAsync(existingReview); 
 
             // Act
             var result = await _reviewService.DeleteReviewAsync(reviewId);
 
             // Assert with Fluent Assertions
-            result.Should().NotBeNull(); // Ensure the result is not null
-            result.Success.Should().BeTrue(); // Ensure the result is a success
-            result.Data.Should().NotBeNull(); // Ensure the Data property is not null
+            result.Should().NotBeNull(); 
+            result.Success.Should().BeTrue();
+            result.Data.Should().BeNull();
 
         }
     }

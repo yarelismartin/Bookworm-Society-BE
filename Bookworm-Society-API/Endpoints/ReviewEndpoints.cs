@@ -1,4 +1,5 @@
-﻿using Bookworm_Society_API.Interfaces;
+﻿using Bookworm_Society_API.DTOs;
+using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Bookworm_Society_API.Result;
 using Bookworm_Society_API.Services;
@@ -11,9 +12,9 @@ namespace Bookworm_Society_API.Endpoints
         {
             var group = routes.MapGroup("reviews").WithTags(nameof(Review));
 
-            group.MapPost("/", async (IReviewService reviewService, Review review) =>
+            group.MapPost("/", async (IReviewService reviewService, CreateReviewDTO reviewDTO) =>
             {
-                var result = await reviewService.CreateReviewAsync(review);
+                var result = await reviewService.CreateReviewAsync(reviewDTO);
 
                 if (result.ErrorType == ErrorType.NotFound)
                 {
@@ -28,7 +29,7 @@ namespace Bookworm_Society_API.Endpoints
                 return Results.Ok(result.Data);
             });
 
-            group.MapPatch("/", async (IReviewService reviewService, Review review, int reviewId) =>
+            group.MapPatch("/{reviewId}", async (IReviewService reviewService, Review review, int reviewId) =>
             {
                 var result = await reviewService.UpdateReviewAsync(review, reviewId);
 
@@ -44,7 +45,7 @@ namespace Bookworm_Society_API.Endpoints
                 return Results.Ok(result.Data);
             });
 
-            group.MapDelete("/", async (IReviewService reviewService, int reviewId) =>
+            group.MapDelete("/{reviewId}", async (IReviewService reviewService, int reviewId) =>
             {
                 var result = await reviewService.DeleteReviewAsync(reviewId);
 
@@ -53,7 +54,7 @@ namespace Bookworm_Society_API.Endpoints
                     return Results.NotFound(result.Message);
                 }
 
-                return Results.Ok(result.Data);
+                return Results.NoContent();
             });
         }
     }
