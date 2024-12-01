@@ -1,4 +1,5 @@
-﻿using Bookworm_Society_API.Interfaces;
+﻿using Bookworm_Society_API.DTOs;
+using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Bookworm_Society_API.Result;
 
@@ -21,9 +22,9 @@ namespace Bookworm_Society_API.Endpoints
                 return Results.Ok(result.Data);
             });
 
-            group.MapPost("/", async (IUserService userService, User user) =>
+            group.MapPost("/", async (IUserService userService, CreateUserDTO userDTO) =>
             {
-                var result = await userService.CreateUserAsync(user);
+                var result = await userService.CreateUserAsync(userDTO);
 
                 if (result.ErrorType == ErrorType.Conflict)
                 {

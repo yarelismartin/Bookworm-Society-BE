@@ -106,7 +106,17 @@ namespace Bookworm_Society_BE.Tests
                 IsPinned = false,
                 IsEdited = false,
                 BookClubId = createPostDto.BookClubId,
-                UserId = createPostDto.UserId
+                UserId = createPostDto.UserId,
+                User = new User
+                {
+                    Id = userId,
+                    FirstName = "John",
+                    LastName = "Doe",
+                    ImageUrl = "https://example.com/johndoe.jpg",
+                    Username = "johndoe",
+                    Uid = "useruid123"
+                },
+                Comments = new List<Comment>()
             };
 
             var existingUser = new User { Id = userId };

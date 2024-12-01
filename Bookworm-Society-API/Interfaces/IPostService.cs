@@ -8,9 +8,9 @@ namespace Bookworm_Society_API.Interfaces
 
     {
         //Get single post
-        Task<Result<object?>> GetPostByIdAsync(int postId);
+        Task<Result<PostDetailDTO?>> GetPostByIdAsync(int postId);
         //Create post
-        Task<Result<Post>> CreatePostAsync(CreatePostDto postDto);
+        Task<Result<PostDetailDTO>> CreatePostAsync(CreatePostDto postDto);
         //Update post 
         Task<Result<Post>> UpdatePostAsync(Post post, int postId);
         //Delete post

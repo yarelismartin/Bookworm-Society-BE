@@ -42,28 +42,28 @@ namespace Bookworm_Society_API.Services
 
         }
 
-        public async Task<Result<User>> CreateUserAsync(User user)
+        public async Task<Result<UserDetailDTO>> CreateUserAsync(CreateUserDTO userDTO)
         {
-            if(await _userRepository.UserUidAlreadyInUseAsync(user.Uid))
+            if(await _userRepository.UserUidAlreadyInUseAsync(userDTO.Uid))
             {
-                return Result<User>.FailureResult($"The following uid is already in use: {user.Uid}", ErrorType.Conflict);
+                return Result<UserDetailDTO>.FailureResult($"The following uid is already in use: {userDTO.Uid}", ErrorType.Conflict);
             }
 
             User userObject = new()
             {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                ImageUrl = user.ImageUrl,
-                Username = user.Username,
-                Uid = user.Uid,
+                FirstName = userDTO.FirstName,
+                LastName = userDTO.LastName,
+                ImageUrl = userDTO.ImageUrl,
+                Username = userDTO.Username,
+                Uid = userDTO.Uid,
 
             };
 
             var newUser = await _userRepository.CreateUserAsync(userObject);
 
-            return Result<User>.SuccessResult(newUser);
+            return Result<UserDetailDTO>.SuccessResult(new UserDetailDTO(newUser));
 
-
+                
         }
 
         public async Task<Result<User>> UpdateUserAsync(User user, int userId)

@@ -1,3 +1,4 @@
+using Bookworm_Society_API.DTOs;
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Bookworm_Society_API.Services;
@@ -29,42 +30,41 @@ namespace Bookworm_Society_BE.Tests
         public async Task AddReview_ShouldReturnReview_WhenAddedIsSuccessful()
         {
             // Arrange
-            var reviewToAdd = new Review
+            var createReviewDto = new CreateReviewDTO
             {
                 Content = "Great book! A must-read for all science fiction fans.",
-                Rating = 5, 
-                UserId = 1, 
-                BookId = 1,
-                CreatedDate = DateTime.Now
+                Rating = 5,
+                UserId = 1,
+                BookId = 1
             };
 
             var createdReview = new Review
             {
-                Id = 1, 
-                Content = reviewToAdd.Content,
-                Rating = reviewToAdd.Rating,
-                UserId = reviewToAdd.UserId,
-                BookId = reviewToAdd.BookId,
-                CreatedDate = reviewToAdd.CreatedDate
+                Id = 1,
+                Content = createReviewDto.Content,
+                Rating = createReviewDto.Rating,
+                UserId = createReviewDto.UserId,
+                BookId = createReviewDto.BookId,
+                CreatedDate = DateTime.Now
             };
 
             // Mock the repository methods
-            _mockBaseRepository.Setup(repo => repo.UserExistsAsync(reviewToAdd.UserId))
+            _mockBaseRepository.Setup(repo => repo.UserExistsAsync(createReviewDto.UserId))
                 .ReturnsAsync(true);
 
-            _mockBaseRepository.Setup(repo => repo.BookExistsAsync(reviewToAdd.BookId))
-                .ReturnsAsync(true); 
+            _mockBaseRepository.Setup(repo => repo.BookExistsAsync(createReviewDto.BookId))
+                .ReturnsAsync(true);
 
             _mockReviewRepository.Setup(repo => repo.CreateReviewAsync(It.IsAny<Review>()))
-                .ReturnsAsync(createdReview); 
+                .ReturnsAsync(createdReview);
 
             // Act
-            var result = await _reviewService.CreateReviewAsync(reviewToAdd);
+            var result = await _reviewService.CreateReviewAsync(createReviewDto);
 
-            // Assert with Fluent Assertions
-            result.Should().NotBeNull(); 
-            result.Success.Should().BeTrue(); 
-            result.Data.Should().NotBeNull(); 
+            // Assert
+            result.Should().NotBeNull();
+            result.Success.Should().BeTrue();
+            result.Data.Should().NotBeNull();
         }
 
         [Fact]

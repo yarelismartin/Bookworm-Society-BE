@@ -1,4 +1,5 @@
 ﻿using Bookworm_Society_API.Data;
+using Bookworm_Society_API.DTOs;
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Bookworm_Society_API.Repositories;
@@ -17,22 +18,22 @@ namespace Bookworm_Society_API.Services
             _baseRepository = baseRepository;
         }
 
-        public async Task<Result<Comment>> CreateCommentAsync(Comment comment)
+        public async Task<Result<Comment>> CreateCommentAsync(CreateCommentDTO commentDTO)
         {
-            if (!await _baseRepository.UserExistsAsync(comment.UserId))
+            if (!await _baseRepository.UserExistsAsync(commentDTO.UserId))
             {
-                return Result<Comment>.FailureResult($"No user was found with the following id: {comment.UserId}", ErrorType.NotFound);
+                return Result<Comment>.FailureResult($"No user was found with the following id: {commentDTO.UserId}", ErrorType.NotFound);
             }
-            if (!await _commentRepository.PostExistAsync(comment.PostId))
+            if (!await _commentRepository.PostExistAsync(commentDTO.PostId))
             {
-                return Result<Comment>.FailureResult($"No post was found with the following id: {comment.PostId}", ErrorType.NotFound);
+                return Result<Comment>.FailureResult($"No post was found with the following id: {commentDTO.PostId}", ErrorType.NotFound);
             }
 
             Comment commentObj = new()
             {
-                Content = comment.Content,
-                PostId = comment.PostId,
-                UserId = comment.UserId
+                Content = commentDTO.Content,
+                PostId = commentDTO.PostId,
+                UserId = commentDTO.UserId
             };
 
             var newComment = await _commentRepository.CreateCommentAsync(commentObj);

@@ -55,26 +55,26 @@ namespace Bookworm_Society_API.Services
             return Result<object>.SuccessResult(dto);
 
         }
-        public async Task<Result<BookClub>> CreateBookClubAsync(BookClub bookClub)
+        public async Task<Result<BookClubDetailDTO>> CreateBookClubAsync(CreateBookClubDTO bookClubDTO)
         {
-            if(!await _baseRepository.UserExistsAsync(bookClub.HostId))
+            if(!await _baseRepository.UserExistsAsync(bookClubDTO.HostId))
             {
-                return Result<BookClub>.FailureResult($"No host was found with the following id: {bookClub.HostId}", ErrorType.NotFound);
+                return Result<BookClubDetailDTO>.FailureResult($"No host was found with the following id: {bookClubDTO.HostId}", ErrorType.NotFound);
             }
 
 
             BookClub newBookClub = new()
             {
-                Name = bookClub.Name,
-                MeetUpType = bookClub.MeetUpType,
-                Description = bookClub.Description,
-                ImageUrl = bookClub.ImageUrl,
-                HostId = bookClub.HostId,
+                Name = bookClubDTO.Name,
+                MeetUpType = bookClubDTO.MeetUpType,
+                Description = bookClubDTO.Description,
+                ImageUrl = bookClubDTO.ImageUrl,
+                HostId = bookClubDTO.HostId,
             };
 
             var createdBookClub = await _bookClubRepository.CreateBookClubAsync(newBookClub);
-            Console.WriteLine($"Created BookClub: {createdBookClub?.Name}");
-            return Result<BookClub>.SuccessResult(createdBookClub);
+            
+            return Result<BookClubDetailDTO>.SuccessResult(new BookClubDetailDTO(createdBookClub, bookClubDTO.HostId));
         }
         public async Task<Result<BookClub>> UpdateBookClubAsync(BookClub bookClub, int bookClubId)
         {

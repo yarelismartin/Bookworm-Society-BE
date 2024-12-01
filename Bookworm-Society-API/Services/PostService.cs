@@ -20,58 +20,38 @@ namespace Bookworm_Society_API.Services
         }
 
         //Get single post
-        public async Task<Result<object?>> GetPostByIdAsync(int postId)
+        public async Task<Result<PostDetailDTO?>> GetPostByIdAsync(int postId)
         {
             var post = await _postRepository.GetPostByIdAsync(postId);
 
             if (post == null)
             {
-                return Result<object>.FailureResult($"No post was found with the following id: {postId}", ErrorType.NotFound);
+                return Result<PostDetailDTO?>.FailureResult($"No post was found with the following id: {postId}", ErrorType.NotFound);
             }
 
-            var postObj = new
-            {
-                post.Id,
-                post.Content,
-                post.CreatedDate,
-                post.IsPinned,
-                post.IsEdited,
-                User = new UserDTO(post.User),
-                Comments = post.Comments?
-                .OrderBy(c => c.CreatedDate)
-                .Select(c => new
-                {
-                    c.Id,
-                    c.Content,
-                    c.CreatedDate,
-                    User = new UserDTO(c.User),
-                })
-            };
-
-
-            return Result<object>.SuccessResult(postObj);
+            return Result<PostDetailDTO>.SuccessResult(new PostDetailDTO(post));
 
         }
         //Create post
-        public async Task<Result<Post>> CreatePostAsync(CreatePostDto postDto)
+        public async Task<Result<PostDetailDTO>> CreatePostAsync(CreatePostDto postDto)
         {
             if (!await _baseRepository.UserExistsAsync(postDto.UserId))
             {
-                return Result<Post>.FailureResult(
+                return Result<PostDetailDTO>.FailureResult(
                     $"No user exists with the following ID: {postDto.UserId}",
                     ErrorType.NotFound
                 );
             }
             if (!await _baseRepository.BookClubExistsAsync(postDto.BookClubId))
             {
-                return Result<Post>.FailureResult(
+                return Result<PostDetailDTO>.FailureResult(
                     $"No book club exists with the following ID: {postDto.BookClubId}",
                     ErrorType.NotFound
                 );
             }
             if (!await _postRepository.IsUserAllowedToPost(postDto.BookClubId, postDto.UserId))
             {
-                return Result<Post>.FailureResult(
+                return Result<PostDetailDTO>.FailureResult(
                     "User is not a member or host of this book club.",
                     ErrorType.Conflict
                 );
@@ -87,7 +67,7 @@ namespace Bookworm_Society_API.Services
             };
 
             var newPost = await _postRepository.CreatePostAsync(post);
-            return Result<Post>.SuccessResult(newPost);
+            return Result<PostDetailDTO>.SuccessResult(new PostDetailDTO(newPost));
         }
         //Update post 
         public async Task<Result<Post>> UpdatePostAsync(Post post, int postId)

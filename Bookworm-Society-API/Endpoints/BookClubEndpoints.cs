@@ -35,9 +35,9 @@ namespace Bookworm_Society_API.Endpoints
                 return Results.Ok(bookClub.Data);
             });
 
-            group.MapPost("/", async (IBookClubService bookClubService, BookClub bookClub) =>
+            group.MapPost("/", async (IBookClubService bookClubService, CreateBookClubDTO bookClubDTO) =>
             {
-                var result = await bookClubService.CreateBookClubAsync(bookClub);
+                var result = await bookClubService.CreateBookClubAsync(bookClubDTO);
             
                 if (result.ErrorType == ErrorType.NotFound)
                 {
