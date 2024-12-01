@@ -9,6 +9,7 @@ Bookworm Society is a platform for book enthusiasts to connect, discuss, and exp
 - [Technologies](#technologies)
 - [Get Started](#get-started)
 - [API Endpoints](#api-endpoints)
+- [ERD](#erd)
 - [Postman Documentation](#postman-documentation)
 - [Frontend Repository Link](#link-to-frontend)
 - [Maintainers](#maintainers)
@@ -124,10 +125,17 @@ Use **Postman** or Swagger UI to interact with the API and test CRUD operations 
 | POST   | `/users`                             | Create a new user             |
 | PUT    | `/users/{userId}`                    | Update a user                 |
 
+
+## ERD
+
+The ERD for the Bookworms project illustrates the relationships between the entities in the system. You can view the ERD using the link below:
+
+[View the ERD for Bookworms on dbdiagram.io](https://dbdiagram.io/d/ERD-For-Bookworms-673817c9e9daa85acaa3de85)
+
 ## Postman Documentation
 The API documentation is available in Postman, providing a detailed guide on how to interact with the Bookworm Society API.
 
-- [Bookworm Society API Documentation](<Insert_Postman_Link_Here>)
+[Bookworm Society API Documentation](https://documenter.getpostman.com/view/31992966/2sAYBYfACM)
 
 ## Link to Frontend
 Here is the link to our frontend repo: [Bookworm Society FE](<Insert_Frontend_Repo_Link_Here>)
