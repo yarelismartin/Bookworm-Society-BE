@@ -19,9 +19,14 @@ namespace Bookworm_Society_API.Endpoints
                     return Results.NotFound(result.Message);
                 }
 
+                if (result.ErrorType == ErrorType.Conflict)
+                {
+                    return Results.Conflict(result.Message);
+                }
+
                 if (result.Data == null)
                 {
-                    return Results.Ok(new { message = result.Message });
+                    return Results.Ok(result.Message);
                 }
 
                 return Results.Ok(result.Data);

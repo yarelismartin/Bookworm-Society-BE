@@ -6,6 +6,7 @@ namespace Bookworm_Society_API.Interfaces
     public interface IVotingSessionRepository
     {
         Task<VotingSession> GetLatestVotingSessionAsync(int bookClubId, int userId);
+        Task<bool> IsUserAllowedToVote(int bookClubId, int userId);
         Task<VotingSession> CreateVotingSession(int userId, int bookClubId, List<int> bookIds);
     }
 }
