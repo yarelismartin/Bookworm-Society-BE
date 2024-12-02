@@ -141,7 +141,7 @@ Here’s a video that reviews some of the key API endpoints.
 
 Below is a video showcasing the unit test results for the 17 endpoints reviewed in the Postman documentation.
 
-https://www.loom.com/share/154d317a7af24e48be4477dec0da7892?sid=3e7e19c6-233d-40ca-815a-6c38f82a6824
+https://www.loom.com/share/94048f30abd94106bc8d83cb9ebdc212?sid=baeaf8ac-746f-40af-bf0e-93522091cae2
 
 ## Link to Frontend
 Here is the link to our frontend repo: [Bookworm Society FE](<Insert_Frontend_Repo_Link_Here>)
