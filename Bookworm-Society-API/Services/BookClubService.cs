@@ -55,26 +55,26 @@ namespace Bookworm_Society_API.Services
             return Result<object>.SuccessResult(dto);
 
         }
-        public async Task<Result<BookClub>> CreateBookClubAsync(BookClub bookClub)
+        public async Task<Result<BookClub>> CreateBookClubAsync(CreateBookClubDTO bookClubDTO)
         {
-            if(!await _baseRepository.UserExistsAsync(bookClub.HostId))
+            if(!await _baseRepository.UserExistsAsync(bookClubDTO.HostId))
             {
-                return Result<BookClub>.FailureResult($"No host was found with the following id: {bookClub.HostId}", ErrorType.NotFound);
+                return Result<BookClub>.FailureResult($"No host was found with the following id: {bookClubDTO.HostId}", ErrorType.NotFound);
             }
 
 
             BookClub newBookClub = new()
             {
-                Name = bookClub.Name,
-                MeetUpType = bookClub.MeetUpType,
-                Description = bookClub.Description,
-                ImageUrl = bookClub.ImageUrl,
-                HostId = bookClub.HostId,
+                Name = bookClubDTO.Name,
+                MeetUpType = bookClubDTO.MeetUpType,
+                Description = bookClubDTO.Description,
+                ImageUrl = bookClubDTO.ImageUrl,
+                HostId = bookClubDTO.HostId,
             };
 
-            var createdBook = await _bookClubRepository.CreateBookClubAsync(newBookClub);
+            var createdBookClub = await _bookClubRepository.CreateBookClubAsync(newBookClub);
 
-            return Result<BookClub>.SuccessResult(createdBook);
+            return Result<BookClub>.SuccessResult(createdBookClub);
         }
         public async Task<Result<BookClub>> UpdateBookClubAsync(BookClub bookClub, int bookClubId)
         {
@@ -99,9 +99,8 @@ namespace Bookworm_Society_API.Services
             {
                 return Result<BookClub>.FailureResult($"No book club was found with the following id: {bookClubId}", ErrorType.NotFound);
             };
-            return Result<BookClub>.SuccessResult(bookClubToDelete);
+            return Result<BookClub>.SuccessResult(null);
         }
-
         public async Task<Result<object>> GetABookClubHaveReadAsync(int bookClubId)
         {
             var bookclub = await _bookClubRepository.GetABookClubHaveReadAsync(bookClubId);
@@ -119,7 +118,6 @@ namespace Bookworm_Society_API.Services
 
             return Result<object>.SuccessResult(bookObj);
         }
-
         public async Task<Result<object>> GetABookClubPostAsync(int bookClubId)
         {
             var bookclub = await _bookClubRepository.GetABookClubHavePostAsync(bookClubId);

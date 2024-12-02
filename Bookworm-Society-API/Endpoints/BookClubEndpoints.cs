@@ -35,9 +35,9 @@ namespace Bookworm_Society_API.Endpoints
                 return Results.Ok(bookClub.Data);
             });
 
-            group.MapPost("/", async (IBookClubService bookClubService, BookClub bookClub) =>
+            group.MapPost("/", async (IBookClubService bookClubService, CreateBookClubDTO bookClubDTO) =>
             {
-                var result = await bookClubService.CreateBookClubAsync(bookClub);
+                var result = await bookClubService.CreateBookClubAsync(bookClubDTO);
             
                 if (result.ErrorType == ErrorType.NotFound)
                 {
@@ -48,7 +48,7 @@ namespace Bookworm_Society_API.Endpoints
 
             });
 
-            group.MapPut("/{bookClubId}", async (IBookClubService bookClubService, BookClub bookClub, int bookClubId) =>
+            group.MapPatch("/{bookClubId}", async (IBookClubService bookClubService, BookClub bookClub, int bookClubId) =>
             {
                 var result = await bookClubService.UpdateBookClubAsync(bookClub, bookClubId);
 
@@ -67,7 +67,7 @@ namespace Bookworm_Society_API.Endpoints
                 {
                     return Results.NotFound(bookToDelete.Message);
                 }
-                return Results.Ok(bookToDelete.Data);
+                return Results.NoContent();
             });
 
             group.MapGet("/have-read", async (IBookClubService bookClubService, int BookClubId) =>

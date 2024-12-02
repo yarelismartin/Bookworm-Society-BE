@@ -1,4 +1,5 @@
-﻿using Bookworm_Society_API.Interfaces;
+﻿using Bookworm_Society_API.DTOs;
+using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Bookworm_Society_API.Result;
 using Bookworm_Society_API.Services;
@@ -11,9 +12,9 @@ namespace Bookworm_Society_API.Endpoints
         {
             var group = routes.MapGroup("comments").WithTags(nameof(Comment));
 
-            group.MapPost("/", async (ICommentService commentService, Comment comment) =>
+            group.MapPost("/", async (ICommentService commentService, CreateCommentDTO commentDTO) =>
             {
-                var result = await commentService.CreateCommentAsync(comment);
+                var result = await commentService.CreateCommentAsync(commentDTO);
 
                 if (result.ErrorType == ErrorType.NotFound)
                 {
@@ -21,7 +22,11 @@ namespace Bookworm_Society_API.Endpoints
                 }
 
                 return Results.Ok(result.Data);
-            });
+            })
+            .WithName("CreateComment")
+            .WithOpenApi()
+            .Produces(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound);
 
             group.MapDelete("/{commentId}", async (ICommentService commentService, int commentId) =>
             {
@@ -32,7 +37,7 @@ namespace Bookworm_Society_API.Endpoints
                     return Results.NotFound(result.Message);
                 }
 
-                return Results.Ok(result.Data);
+                return Results.NoContent();
             });
         }
     }

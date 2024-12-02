@@ -20,65 +20,54 @@ namespace Bookworm_Society_API.Services
         }
 
         //Get single post
-        public async Task<Result<object?>> GetPostByIdAsync(int postId)
+        public async Task<Result<PostDetailDTO?>> GetPostByIdAsync(int postId)
         {
             var post = await _postRepository.GetPostByIdAsync(postId);
 
             if (post == null)
             {
-                return Result<object>.FailureResult($"No post was found with the following id: {postId}", ErrorType.NotFound);
+                return Result<PostDetailDTO?>.FailureResult($"No post was found with the following id: {postId}", ErrorType.NotFound);
             }
 
-            var postObj = new
-            {
-                post.Id,
-                post.Content,
-                post.CreatedDate,
-                post.IsPinned,
-                post.IsEdited,
-                User = new UserDTO(post.User),
-                Comments = post.Comments?
-                .OrderBy(c => c.CreatedDate)
-                .Select(c => new
-                {
-                    c.Id,
-                    c.Content,
-                    c.CreatedDate,
-                    User = new UserDTO(c.User),
-                })
-            };
-
-
-            return Result<object>.SuccessResult(postObj);
+            return Result<PostDetailDTO>.SuccessResult(new PostDetailDTO(post));
 
         }
         //Create post
-        public async Task<Result<Post>> CreatePostAsync(Post post)
+        public async Task<Result<PostDetailDTO>> CreatePostAsync(CreatePostDto postDto)
         {
-            if(!await _baseRepository.UserExistsAsync(post.UserId))
+            if (!await _baseRepository.UserExistsAsync(postDto.UserId))
             {
-                return Result<Post>.FailureResult($"No user exist with the following id: {post.UserId}", ErrorType.NotFound);
+                return Result<PostDetailDTO>.FailureResult(
+                    $"No user exists with the following ID: {postDto.UserId}",
+                    ErrorType.NotFound
+                );
             }
-            if (!await _baseRepository.BookClubExistsAsync(post.BookClubId))
+            if (!await _baseRepository.BookClubExistsAsync(postDto.BookClubId))
             {
-                return Result<Post>.FailureResult($"No book club exist with the following id: {post.BookClubId}", ErrorType.NotFound);
+                return Result<PostDetailDTO>.FailureResult(
+                    $"No book club exists with the following ID: {postDto.BookClubId}",
+                    ErrorType.NotFound
+                );
             }
-            if (!await _postRepository.IsUserAllowedToPost(post.BookClubId, post.UserId))
+            if (!await _postRepository.IsUserAllowedToPost(postDto.BookClubId, postDto.UserId))
             {
-                return Result<Post>.FailureResult("User is not a member or host of this book club.", ErrorType.Conflict);
+                return Result<PostDetailDTO>.FailureResult(
+                    "User is not a member or host of this book club.",
+                    ErrorType.Conflict
+                );
             }
 
-            Post postObj = new()
+            Post post = new()
             {
-                Content = post.Content,
-                IsPinned = false,
-                IsEdited = false,
-                BookClubId = post.BookClubId,
-                UserId = post.UserId
+                Content = postDto.Content,
+                IsPinned = false, 
+                IsEdited = false, 
+                BookClubId = postDto.BookClubId,
+                UserId = postDto.UserId
             };
 
-            var newPost = await _postRepository.CreatePostAsync(postObj);
-            return Result<Post>.SuccessResult(newPost);
+            var newPost = await _postRepository.CreatePostAsync(post);
+            return Result<PostDetailDTO>.SuccessResult(new PostDetailDTO(newPost));
         }
         //Update post 
         public async Task<Result<Post>> UpdatePostAsync(Post post, int postId)
@@ -103,7 +92,7 @@ namespace Bookworm_Society_API.Services
                 return Result<Post>.FailureResult($"No post was found with the following id: {postId}", ErrorType.NotFound);
             }
 
-            return Result<Post>.SuccessResult(postToDelete);
+            return Result<Post>.SuccessResult(null);
         }
     }
 }
