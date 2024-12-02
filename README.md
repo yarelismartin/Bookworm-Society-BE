@@ -9,6 +9,7 @@ Bookworm Society is a platform for book enthusiasts to connect, discuss, and exp
 - [Technologies](#technologies)
 - [Get Started](#get-started)
 - [API Endpoints](#api-endpoints)
+- [ERD](#erd)
 - [Postman Documentation](#postman-documentation)
 - [Frontend Repository Link](#link-to-frontend)
 - [Maintainers](#maintainers)
@@ -124,10 +125,23 @@ Use **Postman** or Swagger UI to interact with the API and test CRUD operations 
 | POST   | `/users`                             | Create a new user             |
 | PUT    | `/users/{userId}`                    | Update a user                 |
 
-## Postman Documentation
-The API documentation is available in Postman, providing a detailed guide on how to interact with the Bookworm Society API.
 
-- [Bookworm Society API Documentation](<Insert_Postman_Link_Here>)
+## ERD
+
+The ERD for the Bookworms project illustrates the relationships between the entities in the system. You can view the ERD using the link below:
+[View the ERD for Bookworms on dbdiagram.io](https://dbdiagram.io/d/ERD-For-Bookworms-673817c9e9daa85acaa3de85)
+
+## Postman Documentation
+
+The API documentation for the Bookworm Society is available on Postman, offering a comprehensive guide on how to interact with the API.
+[Bookworm Society API Documentation](https://documenter.getpostman.com/view/31992966/2sAYBYfACM)
+
+Here’s a video that reviews some of the key API endpoints.
+[Watch the video on Canva!](https://www.canva.com/design/DAGYGULiCNU/IYZw74XwFUiuMh2Eiay5NA/watch?utm_content=DAGYGULiCNU&utm_campaign=designshare&utm_medium=link&utm_source=editor)
+
+Below is a video showcasing the unit test results for the 17 endpoints reviewed in the Postman documentation.
+
+https://www.loom.com/share/94048f30abd94106bc8d83cb9ebdc212?sid=baeaf8ac-746f-40af-bf0e-93522091cae2
 
 ## Link to Frontend
 Here is the link to our frontend repo: [Bookworm Society FE](<Insert_Frontend_Repo_Link_Here>)
