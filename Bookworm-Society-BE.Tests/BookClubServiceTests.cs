@@ -139,15 +139,6 @@ namespace Bookworm_Society_BE.Tests
                 HostId = 1,
             };
 
-            var mockHost = new User
-            {
-                Id = 1,
-                FirstName = "John",
-                LastName = "Doe",
-                Username = "johndoe",
-                ImageUrl = "https://example.com/johndoe.jpg",
-            };
-
             var createdBookClub = new BookClub
             {
                 Id = 1,
@@ -156,7 +147,6 @@ namespace Bookworm_Society_BE.Tests
                 Description = bookClubToCreate.Description,
                 ImageUrl = bookClubToCreate.ImageUrl,
                 HostId = bookClubToCreate.HostId,
-                Host = mockHost,
                 Members = new List<User>(), 
                 DateCreated = DateTime.Now
             };
@@ -174,7 +164,7 @@ namespace Bookworm_Society_BE.Tests
             // Assert
             result.Should().NotBeNull();
             result.Success.Should().BeTrue();
-            result.Data.Should().BeEquivalentTo(new BookClubDetailDTO(createdBookClub, bookClubToCreate.HostId));
+            result.Data.Should().BeEquivalentTo(createdBookClub);
         }
 
         [Fact]

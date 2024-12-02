@@ -55,11 +55,11 @@ namespace Bookworm_Society_API.Services
             return Result<object>.SuccessResult(dto);
 
         }
-        public async Task<Result<BookClubDetailDTO>> CreateBookClubAsync(CreateBookClubDTO bookClubDTO)
+        public async Task<Result<BookClub>> CreateBookClubAsync(CreateBookClubDTO bookClubDTO)
         {
             if(!await _baseRepository.UserExistsAsync(bookClubDTO.HostId))
             {
-                return Result<BookClubDetailDTO>.FailureResult($"No host was found with the following id: {bookClubDTO.HostId}", ErrorType.NotFound);
+                return Result<BookClub>.FailureResult($"No host was found with the following id: {bookClubDTO.HostId}", ErrorType.NotFound);
             }
 
 
@@ -73,8 +73,8 @@ namespace Bookworm_Society_API.Services
             };
 
             var createdBookClub = await _bookClubRepository.CreateBookClubAsync(newBookClub);
-            
-            return Result<BookClubDetailDTO>.SuccessResult(new BookClubDetailDTO(createdBookClub, bookClubDTO.HostId));
+
+            return Result<BookClub>.SuccessResult(createdBookClub);
         }
         public async Task<Result<BookClub>> UpdateBookClubAsync(BookClub bookClub, int bookClubId)
         {
