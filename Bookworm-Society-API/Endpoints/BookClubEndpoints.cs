@@ -48,7 +48,7 @@ namespace Bookworm_Society_API.Endpoints
 
             });
 
-            group.MapPut("/{bookClubId}", async (IBookClubService bookClubService, BookClub bookClub, int bookClubId) =>
+            group.MapPatch("/{bookClubId}", async (IBookClubService bookClubService, BookClub bookClub, int bookClubId) =>
             {
                 var result = await bookClubService.UpdateBookClubAsync(bookClub, bookClubId);
 
