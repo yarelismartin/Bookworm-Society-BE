@@ -45,9 +45,21 @@ namespace Bookworm_Society_API.Repositories
             return isHost || isMember;
         }
 
-        public async Task<VotingSession> CreateVotingSession(int userId, int bookClubId, List<int> bookIds)
+        public async Task<VotingSession> CreateVotingSession(VotingSession votingSession)
         {
-            throw new NotImplementedException();
+            await dbContext.VotingSessions.AddAsync(votingSession);
+            await dbContext.SaveChangesAsync();
+            return votingSession;
         }
+
+        public async Task<List<Book>> GetBooksByIdsAsync(List<int> bookIds)
+        {
+            var books = await dbContext.Books
+                .Where(b => bookIds.Contains(b.Id))
+                .ToListAsync();
+
+            return books;
+        }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Bookworm_Society_API.Data;
+using Bookworm_Society_API.DTOs;
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Bookworm_Society_API.Result;
@@ -65,9 +66,52 @@ namespace Bookworm_Society_API.Services
 
             return Result<object?>.SuccessResult(latestVotingSession);
         }
-        public async Task<Result<VotingSession>> CreateVotingSession(int userId, int bookClubId, List<int> bookIds)
+        public async Task<Result<VotingSession>> CreateVotingSession(CreateVotingSessionDTO votingSessionDTO, int userId)
         {
-            throw new NotImplementedException();
+            BookClub bookClub = await _baseRepository.GetSingleBookClubAsync(votingSessionDTO.BookClubId);
+
+            if (bookClub == null)
+            {
+                return Result<VotingSession>.FailureResult($"No book club was found with the following id: {votingSessionDTO.BookClubId}", ErrorType.NotFound);
+            }
+
+            if (bookClub.HostId != userId)
+            {
+                return Result<VotingSession>.FailureResult($"Only the host can create a voting session. You are not authorized to perform this action", ErrorType.Conflict);
+            }
+
+            int daysApart = (votingSessionDTO.VotingEndDate - DateTime.Now).Days;
+            if (daysApart > 4 )
+            {
+                return Result<VotingSession>.FailureResult($"The voting session duration cannot exceed 4 days. Please choose an earlier end date.", ErrorType.Conflict);
+            }
+
+            if (votingSessionDTO.BookIds.Count <= 1  )
+            {
+                return Result<VotingSession>.FailureResult($"You must select at least two books to be voted on. You currently only selected: {votingSessionDTO.BookIds.Count}", ErrorType.Conflict);
+            }
+
+            var existingBooks = await _votingSessionRepository.GetBooksByIdsAsync(votingSessionDTO.BookIds);
+
+            if (existingBooks.Count != votingSessionDTO.BookIds.Count)
+            {
+                // Except method is used to find the difference between two collections. It returns the elements that are in the first collection but not in the second.
+                var missingBookIds = votingSessionDTO.BookIds.Except(existingBooks.Select(b => b.Id)).ToList();
+                return Result<VotingSession>.FailureResult($"The following books do not exist: {string.Join(", ", missingBookIds)}", ErrorType.NotFound);
+            }
+
+            VotingSession votingSession = new()
+            {
+                BookClubId = votingSessionDTO.BookClubId,
+                VotingEndDate = votingSessionDTO.VotingEndDate,
+                IsActive = true,
+                VotingBooks = existingBooks
+            };
+
+            var createdVotginSession = await _votingSessionRepository.CreateVotingSession(votingSession);
+            return Result<VotingSession>.SuccessResult(votingSession);
+
+
         }
     }
 }

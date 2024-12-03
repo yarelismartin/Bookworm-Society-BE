@@ -7,6 +7,8 @@ namespace Bookworm_Society_API.Interfaces
     {
         Task<VotingSession> GetLatestVotingSessionAsync(int bookClubId, int userId);
         Task<bool> IsUserAllowedToVote(int bookClubId, int userId);
-        Task<VotingSession> CreateVotingSession(int userId, int bookClubId, List<int> bookIds);
+        Task<VotingSession> CreateVotingSession(VotingSession votingSession);
+
+        Task<List<Book>> GetBooksByIdsAsync(List<int> bookIds);
     }
 }

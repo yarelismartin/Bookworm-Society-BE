@@ -52,7 +52,7 @@ namespace Bookworm_Society_API.Services
             if (!await _postRepository.IsUserAllowedToPost(postDto.BookClubId, postDto.UserId))
             {
                 return Result<PostDetailDTO>.FailureResult(
-                    "User is not a member or host of this book club.",
+                    "The user is not a member or the host of this book club and cannot access this feature.",
                     ErrorType.Conflict
                 );
             }
