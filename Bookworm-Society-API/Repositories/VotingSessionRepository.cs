@@ -2,6 +2,7 @@
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 namespace Bookworm_Society_API.Repositories
 {
@@ -59,6 +60,49 @@ namespace Bookworm_Society_API.Repositories
                 .ToListAsync();
 
             return books;
+        }
+
+        public async Task<List<VotingSession>> GetActiveVotingSessions(CancellationToken cancellationToken)
+        {
+            return await dbContext.VotingSessions
+                .Include(vs => vs.BookClub)
+                .Where(vs => vs.IsActive == true).ToListAsync(cancellationToken);
+        }
+
+
+        public async Task FinalizeVotingSessionAsync(int votingSessionId, CancellationToken cancellationToken)
+        {
+            var session = await dbContext.VotingSessions
+                .Include(vs => vs.Votes)
+                .Include(vs => vs.BookClub)
+                    .ThenInclude(b => b.Book)
+                .Include(vs => vs.BookClub)
+                    .ThenInclude(bc => bc.HaveRead)
+                .SingleOrDefaultAsync(vs => vs.Id == votingSessionId, cancellationToken);
+
+            if (session.VotingEndDate <= DateTime.UtcNow)
+            {
+                session.IsActive = false;
+
+                if(session.BookClub.Book != null)
+{
+                    session.BookClub.HaveRead.Add(session.BookClub.Book);
+                }
+
+                session.WinningBookId = await CalculateWinningBook(session.Votes);
+
+                session.BookClub.BookId = session.WinningBookId;
+
+                await dbContext.SaveChangesAsync(cancellationToken);
+            }
+        }
+        public async Task<int> CalculateWinningBook(List<Vote> votes)
+        {
+            return votes.GroupBy(v => v.BookId)
+                .OrderByDescending(g => g.Count())
+                .Select(g => g.Key)
+                .FirstOrDefault();
+
         }
 
     }

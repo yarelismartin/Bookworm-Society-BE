@@ -10,5 +10,9 @@ namespace Bookworm_Society_API.Interfaces
         Task<VotingSession> CreateVotingSession(VotingSession votingSession);
 
         Task<List<Book>> GetBooksByIdsAsync(List<int> bookIds);
+        Task<List<VotingSession>> GetActiveVotingSessions(CancellationToken cancellationToken);
+        Task<int> CalculateWinningBook(int votingSessionId);
+
+        Task FinalizeVotingSessionAsync(int votingSessionId, CancellationToken cancellationToken);
     }
 }

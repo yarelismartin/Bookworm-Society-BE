@@ -113,5 +113,21 @@ namespace Bookworm_Society_API.Services
 
 
         }
+
+        public async Task CheckAndUpdateVotingSession(CancellationToken cancellationToken)
+        {
+            
+            var activeSessions = await _votingSessionRepository.GetActiveVotingSessions(cancellationToken);
+
+            foreach (var session in activeSessions)
+            {
+                if(session.VotingEndDate <= DateTime.UtcNow)
+                {
+                    await _votingSessionRepository.FinalizeVotingSessionAsync(session.Id, cancellationToken);
+
+                }
+            }
+
+        }
     }
 }
