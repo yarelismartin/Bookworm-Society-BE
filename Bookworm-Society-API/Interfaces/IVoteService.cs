@@ -6,6 +6,6 @@ namespace Bookworm_Society_API.Interfaces
 {
     public interface IVoteService
     {
-        Task<Result<Vote>> CreateVote(CreateVoteDTO voteDTO);
+        Task<Result<object>> CreateVote(CreateVoteDTO voteDTO);
     }
 }
