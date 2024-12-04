@@ -17,7 +17,7 @@
 
         public List<VotingSession>? VotingSessions {  get; set; }
         public List<User>? Members { get; set; }
-        public List<Book>? HaveRead {  get; set; }
+        public List<Book>? HaveRead {  get; set; } = new List<Book>();
         public List<Post>? Posts { get; set; }
 
 

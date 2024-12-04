@@ -13,7 +13,7 @@
         public int BookClubId { get; set; }
         public BookClub BookClub { get; set; }
 
-        public List<Book>? VotingBooks {  get; set; }
+        public List<Book> VotingBooks {  get; set; }
         public List<Vote>? Votes { get; set; }
 
     }

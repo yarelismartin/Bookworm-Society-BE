@@ -13,6 +13,7 @@ namespace Bookworm_Society_API.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<BookClub> BookClubs { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<Vote> Votes { get; set; }
 
         public Bookworm_SocietyDbContext(DbContextOptions<Bookworm_SocietyDbContext> context) : base(context) 
         {
@@ -69,6 +70,8 @@ namespace Bookworm_Society_API.Data
             modelBuilder.Entity<BookClub>().HasData(BookClubData.BookClubs);
 
             modelBuilder.Entity<Book>().HasData(BookData.Books);
+
+            modelBuilder.Entity<Vote>().HasData(VoteData.Votes);
 
         }
     }

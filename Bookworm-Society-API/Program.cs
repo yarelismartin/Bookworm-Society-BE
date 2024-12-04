@@ -9,6 +9,8 @@ using Bookworm_Society_API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders(); // Optional: Remove other providers if needed
+builder.Logging.AddConsole(); // Log to the console
 
 // allows passing datetimes without time zone data 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -47,6 +49,8 @@ builder.Services.AddScoped<IBookClubService, BookClubService>();
 builder.Services.AddScoped<IBookClubRepository, BookClubRepository>();
 
 builder.Services.AddScoped<IBaseRepository, BaseRepository>();
+
+builder.Services.AddHostedService<VotingSessionChecker>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
