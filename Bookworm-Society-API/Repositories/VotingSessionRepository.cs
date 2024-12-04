@@ -74,10 +74,15 @@ namespace Bookworm_Society_API.Repositories
         {
             var session = await dbContext.VotingSessions
                 .Include(vs => vs.Votes)
+                .Include(vs => vs.VotingBooks)
                 .Include(vs => vs.BookClub)
                     .ThenInclude(b => b.Book)
                 .Include(vs => vs.BookClub)
                     .ThenInclude(bc => bc.HaveRead)
+
+                // With query splitting (.AsSplitQuery()), EF Core generates multiple,
+                // simpler queries that are more efficient and avoid duplicate rows, improving performance.
+                .AsSplitQuery()
                 .SingleOrDefaultAsync(vs => vs.Id == votingSessionId, cancellationToken);
 
             if (session.VotingEndDate <= DateTime.UtcNow)
@@ -89,7 +94,16 @@ namespace Bookworm_Society_API.Repositories
                     session.BookClub.HaveRead.Add(session.BookClub.Book);
                 }
 
-                session.WinningBookId = await CalculateWinningBook(session.Votes);
+                if (!session.Votes.Any())
+                {
+                    session.WinningBookId = session.VotingBooks.First().Id;
+                }
+
+                else
+                {
+                    session.WinningBookId = await CalculateWinningBook(session.Votes);
+
+                }
 
                 session.BookClub.BookId = session.WinningBookId;
 
@@ -102,8 +116,36 @@ namespace Bookworm_Society_API.Repositories
                 .OrderByDescending(g => g.Count())
                 .Select(g => g.Key)
                 .FirstOrDefault();
-
+            
         }
 
+        public async Task<int> CalculateWinningBookAsync(List<Vote> votes)
+        {
+            // Step 2: Count votes for each book
+            var bookVoteCounts = votes
+                .GroupBy(vote => vote.BookId)
+                .Select(group => new { BookId = group.Key, VoteCount = group.Count() })
+                .ToList();
+
+            // Step 3: Find the highest vote count
+            var maxVoteCount = bookVoteCounts.Max(bvc => bvc.VoteCount);
+
+            // Step 4: Find books with the highest vote count (this checks for ties)
+            var tiedBooks = bookVoteCounts
+                .Where(bvc => bvc.VoteCount == maxVoteCount)
+                .Select(bvc => bvc.BookId)
+                .ToList();
+
+            // Step 5: If there is a tie, select a book randomly
+            if (tiedBooks.Count > 1)
+            {
+                var random = new Random();
+                var randomIndex = random.Next(tiedBooks.Count);
+                return tiedBooks[randomIndex];
+            }
+
+            // Step 6: Return the book with the highest vote count (no tie)
+            return tiedBooks.First();
+        }
     }
 }

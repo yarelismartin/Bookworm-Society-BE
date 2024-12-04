@@ -9,6 +9,8 @@ using Bookworm_Society_API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders(); // Optional: Remove other providers if needed
+builder.Logging.AddConsole(); // Log to the console
 
 // allows passing datetimes without time zone data 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

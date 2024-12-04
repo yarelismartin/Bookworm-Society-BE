@@ -22,7 +22,9 @@ namespace Bookworm_Society_API.Services
             {
                 try
                 {
-                    using(var scope = _serviceProvider.CreateScope())
+                    _logger.LogInformation("VotingSessionChecker is executing at {Time}", DateTime.UtcNow);
+
+                    using (var scope = _serviceProvider.CreateScope())
                     {
                         var votingService = scope.ServiceProvider.GetRequiredService<IVotingSessionService>();
 
@@ -34,7 +36,7 @@ namespace Bookworm_Society_API.Services
                     _logger.LogError(ex, "An error occured with this VotingSessionCheckern");
                 }
 
-                await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(2), stoppingToken);
             }
 
             _logger.LogInformation("VotingSessionChecker service is stopped");

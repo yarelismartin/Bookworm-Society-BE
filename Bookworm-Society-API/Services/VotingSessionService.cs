@@ -114,7 +114,7 @@ namespace Bookworm_Society_API.Services
 
         }
 
-        public async Task CheckAndUpdateVotingSession(CancellationToken cancellationToken)
+        public async Task CheckAndUpdateVotingSessionAsync(CancellationToken cancellationToken)
         {
             
             var activeSessions = await _votingSessionRepository.GetActiveVotingSessions(cancellationToken);
