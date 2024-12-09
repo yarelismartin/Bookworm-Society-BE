@@ -2,6 +2,7 @@
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 
 namespace Bookworm_Society_API.Repositories
@@ -45,7 +46,9 @@ namespace Bookworm_Society_API.Repositories
 
         public async Task<BookClub> UpdateBookClubAsync(BookClub bookClub, int bookClubId)
         {
-            var bookClubToUpdate = await dbContext.BookClubs.SingleOrDefaultAsync(bc => bc.Id == bookClubId);
+            var bookClubToUpdate = await dbContext.BookClubs
+                .Include(bc => bc.Members)
+                .SingleOrDefaultAsync(bc => bc.Id == bookClubId);
 
             if (bookClubToUpdate == null)
             {
@@ -56,8 +59,15 @@ namespace Bookworm_Society_API.Repositories
             bookClubToUpdate.MeetUpType = bookClub.MeetUpType;
             bookClubToUpdate.Description = bookClub.Description;
             bookClubToUpdate.ImageUrl = bookClub.ImageUrl;
-            bookClubToUpdate.HostId = bookClub.HostId;
+           
 
+            if (bookClubToUpdate.HostId != bookClub.HostId)
+            {
+                var newHost = await dbContext.Users.SingleOrDefaultAsync(u => u.Id == bookClub.HostId);
+                bookClubToUpdate.Members?.Remove(newHost);
+            }
+
+            bookClubToUpdate.HostId = bookClub.HostId;
             await dbContext.SaveChangesAsync();
             return bookClubToUpdate;
         }
