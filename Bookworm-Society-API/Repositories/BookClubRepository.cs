@@ -104,6 +104,8 @@ namespace Bookworm_Society_API.Repositories
             var bookClub = await dbContext.BookClubs
                 .Include(bc => bc.Posts)
                 .ThenInclude(p => p.User)
+                .Include(bc => bc.Posts)
+                .ThenInclude(p => p.Comments)
                 .SingleOrDefaultAsync(bc => bc.Id == bookClubId);
 
             if (bookClub == null)
@@ -111,7 +113,10 @@ namespace Bookworm_Society_API.Repositories
                 return null;
             }
 
-            bookClub.Posts = bookClub.Posts?.OrderByDescending(post => post.CreatedDate ).ToList();
+            bookClub.Posts = bookClub.Posts?
+                .OrderByDescending(post => post.IsPinned)
+                .ThenByDescending(post => post.CreatedDate)
+                .ToList();
 
             return bookClub;
         }
