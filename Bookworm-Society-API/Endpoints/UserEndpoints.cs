@@ -56,7 +56,7 @@ namespace Bookworm_Society_API.Endpoints
                 return Results.Ok(result.Data);
             });
 
-            group.MapGet("/myClubs", async (IUserService userService, int userId) =>
+            group.MapGet("/{userId}/my-clubs", async (IUserService userService, int userId) =>
             {
                 var result = await userService.GetUsersClubs(userId);
 

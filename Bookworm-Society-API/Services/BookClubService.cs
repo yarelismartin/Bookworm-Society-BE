@@ -89,7 +89,9 @@ namespace Bookworm_Society_API.Services
             {
                 return Result<BookClub>.FailureResult($"No book club was found with the following id: {bookClubId}", ErrorType.NotFound);
             }
-             
+            
+            
+
             return Result<BookClub>.SuccessResult(bookClubToUpdate);
         }
         public async Task<Result<BookClub>> DeleteBookClubAsync(int bookClubId)
@@ -139,6 +141,8 @@ namespace Bookworm_Society_API.Services
                     p.IsPinned,
                     p.IsEdited, 
                     User = new UserDTO(p.User),
+                    CommentCount = p.Comments?.Count(),
+
                 }).ToList(),
             };
 
@@ -173,12 +177,12 @@ namespace Bookworm_Society_API.Services
                 return Result<object>.FailureResult(message, ErrorType.Conflict);
             }
 
-            var addMember = await _bookClubRepository.AddUserToBookClubAsync(bookclub, userId);
+            var book = await _bookClubRepository.AddUserToBookClubAsync(bookclub, userId);
 
             var currentMembers = new
             {
-                addMember.Id,
-                Members = addMember.Members?.Select(m => new UserDTO(m)).ToList(),
+                book.Id,
+                Members = book.Members?.Select(m => new UserDTO(m)).ToList(),
             };
 
             return Result<object>.SuccessResult(currentMembers);

@@ -28,8 +28,9 @@ namespace Bookworm_Society_API.Repositories
                 return null;
 
 
-            var activeVotingSessions = bookclub.VotingSessions.FirstOrDefault(vs => vs.IsActive && vs.VotingEndDate >= DateTime.Now);
-            return activeVotingSessions;
+            var activeVotingSession = bookclub.VotingSessions.FirstOrDefault(vs => vs.IsActive && vs.VotingEndDate >= DateTime.Now);
+
+            return activeVotingSession;
             
         }
 
@@ -42,6 +43,7 @@ namespace Bookworm_Society_API.Repositories
 
             bool isHost = bookClub.Host.Id == userId;
             bool isMember = bookClub.Members?.Any(m => m.Id == userId) == true;
+            bool isAllowedToVote = isHost || isMember;
 
             return isHost || isMember;
         }
@@ -68,7 +70,6 @@ namespace Bookworm_Society_API.Repositories
                 .Include(vs => vs.BookClub)
                 .Where(vs => vs.IsActive == true).ToListAsync(cancellationToken);
         }
-
 
         public async Task FinalizeVotingSessionAsync(int votingSessionId, CancellationToken cancellationToken)
         {
@@ -130,7 +131,7 @@ namespace Bookworm_Society_API.Repositories
             // Step 3: Find the highest vote count
             var maxVoteCount = bookVoteCounts.Max(bvc => bvc.VoteCount);
 
-            // Step 4: Find books with the highest vote count (this checks for ties)
+            // Step 4: Find books with the highest vote 
             var tiedBooks = bookVoteCounts
                 .Where(bvc => bvc.VoteCount == maxVoteCount)
                 .Select(bvc => bvc.BookId)

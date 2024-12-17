@@ -70,9 +70,9 @@ namespace Bookworm_Society_API.Endpoints
                 return Results.NoContent();
             });
 
-            group.MapGet("/have-read", async (IBookClubService bookClubService, int BookClubId) =>
+            group.MapGet("{bookClubId}/have-read", async (IBookClubService bookClubService, int bookClubId) =>
             {
-                var bookClub = await bookClubService.GetABookClubHaveReadAsync(BookClubId);
+                var bookClub = await bookClubService.GetABookClubHaveReadAsync(bookClubId);
                 if (bookClub.ErrorType == ErrorType.NotFound)
                 {
                     return Results.NotFound(bookClub.Message);
@@ -80,7 +80,7 @@ namespace Bookworm_Society_API.Endpoints
                 return Results.Ok(bookClub.Data);
             });
 
-            group.MapGet("/community-posts", async (IBookClubService bookClubService, int bookClubId) =>
+            group.MapGet("{bookClubId}/community-posts", async (IBookClubService bookClubService, int bookClubId) =>
             {
                 var bookClub = await bookClubService.GetABookClubPostAsync(bookClubId);
                 if (bookClub.ErrorType == ErrorType.NotFound)
@@ -90,7 +90,7 @@ namespace Bookworm_Society_API.Endpoints
                 return Results.Ok(bookClub.Data);
             });
 
-            group.MapGet("/{bookClubId}/add-user/{userId}", async (IBookClubService bookClubService, int bookClubId, int userId) =>
+            group.MapPost("/{bookClubId}/add-user/{userId}", async (IBookClubService bookClubService, int bookClubId, int userId) =>
             {
 
                 var bookClub = await bookClubService.AddUserToBookClubAsync(bookClubId, userId);
@@ -108,7 +108,7 @@ namespace Bookworm_Society_API.Endpoints
 
             });
 
-            group.MapGet("/{bookClubId}/remove-user/{userId}", async (IBookClubService bookClubService, int bookClubId, int userId) =>
+            group.MapDelete("/{bookClubId}/remove-user/{userId}", async (IBookClubService bookClubService, int bookClubId, int userId) =>
             {
                 var bookClub = await bookClubService.RemoveUserFromBookClubAsync(bookClubId, userId);
 
