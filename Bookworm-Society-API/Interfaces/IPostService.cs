@@ -15,5 +15,7 @@ namespace Bookworm_Society_API.Interfaces
         Task<Result<Post>> UpdatePostAsync(Post post, int postId);
         //Delete post
         Task<Result<Post>> DeletePostAsync(int postId);
+
+        Task<Result<bool>> PinPostAsync(PinPostRequestDTO pinRequestDto, int postId);
     }
 }

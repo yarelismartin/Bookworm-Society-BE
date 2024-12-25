@@ -2,6 +2,7 @@
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Bookworm_Society_API.Result;
+using Bookworm_Society_API.Services;
 using Microsoft.Extensions.Hosting;
 
 namespace Bookworm_Society_API.Endpoints
@@ -24,9 +25,9 @@ namespace Bookworm_Society_API.Endpoints
                 return Results.Ok(post.Data);
             });
 
-            group.MapPost("/", async (IPostService postService, CreatePostDto postDtot) =>
+            group.MapPost("/", async (IPostService postService, CreatePostDto postDto) =>
             {
-                var result = await postService.CreatePostAsync(postDtot);
+                var result = await postService.CreatePostAsync(postDto);
 
                 if (result.ErrorType == ErrorType.NotFound)
                 {
@@ -62,6 +63,22 @@ namespace Bookworm_Society_API.Endpoints
                 }
 
                 return Results.NoContent();
+            });
+
+            group.MapPatch("/{postId}/pin-post", async (IPostService postService, PinPostRequestDTO pinRequestDto, int postId) =>
+            {
+                var result = await postService.PinPostAsync(pinRequestDto, postId);
+
+                if (result.ErrorType == ErrorType.NotFound)
+                {
+                    return Results.NotFound(result.Message);
+                }
+                if (result.ErrorType == ErrorType.Conflict)
+                {
+                    return Results.Conflict(result.Message);
+                }
+
+                return Results.Ok(result.Message);
             });
         }
     }
