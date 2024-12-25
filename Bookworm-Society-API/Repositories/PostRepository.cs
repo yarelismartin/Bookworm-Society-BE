@@ -1,8 +1,11 @@
 ﻿using Bookworm_Society_API.Data;
+using Bookworm_Society_API.DTOs;
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
+using Bookworm_Society_API.Result;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace Bookworm_Society_API.Repositories
 {
@@ -73,6 +76,19 @@ namespace Bookworm_Society_API.Repositories
             bool isMember = bookClub.Members?.Any(m => m.Id == userId) == true;
 
             return isHost || isMember;
+        }
+
+        public async Task<bool> TogglePinPostAsync(int postId)
+        {
+            var post = await dbContext.Posts.SingleOrDefaultAsync(p => p.Id == postId);
+
+
+            post.IsPinned = !post.IsPinned;
+
+            await dbContext.SaveChangesAsync();
+
+            return post.IsPinned;
+
         }
 
     }
