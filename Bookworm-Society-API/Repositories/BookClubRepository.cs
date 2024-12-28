@@ -30,10 +30,7 @@ namespace Bookworm_Society_API.Repositories
                 .Include(bc => bc.Book)
                 .Include(bc => bc.Members)
                 .SingleOrDefaultAsync(bc => bc.Id == bookClubId);
-            if (bookClub == null)
-            {
-                return null;
-            }
+           
             return bookClub;
          }
 
@@ -74,7 +71,7 @@ namespace Bookworm_Society_API.Repositories
         public async Task<BookClub> DeleteBookClubAsync(int bookClubId)
             {
                 var bookClubToDelete = await dbContext.BookClubs.SingleOrDefaultAsync(bc => bc.Id == bookClubId);
-                
+
                 if (bookClubToDelete == null)
                 {
                     return null;
@@ -92,14 +89,9 @@ namespace Bookworm_Society_API.Repositories
                 .Include(bc => bc.HaveRead)
                 .SingleOrDefaultAsync(bc => bc.Id == bookClubId);
 
-            if (bookClub == null)
-            {
-                return null;
-            }
-
             return bookClub;
         }
-        public async Task<BookClub> GetABookClubHavePostAsync(int bookClubId)
+        public async Task<BookClub> GetABookClubPostsAsync(int bookClubId)
         {
             var bookClub = await dbContext.BookClubs
                 .Include(bc => bc.Posts)

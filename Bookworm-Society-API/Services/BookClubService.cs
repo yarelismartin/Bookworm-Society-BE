@@ -122,7 +122,7 @@ namespace Bookworm_Society_API.Services
         }
         public async Task<Result<object>> GetABookClubPostAsync(int bookClubId)
         {
-            var bookclub = await _bookClubRepository.GetABookClubHavePostAsync(bookClubId);
+            var bookclub = await _bookClubRepository.GetABookClubPostsAsync(bookClubId);
 
             if (bookclub == null)
             {

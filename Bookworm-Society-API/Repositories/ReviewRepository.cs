@@ -31,6 +31,7 @@ namespace Bookworm_Society_API.Repositories
                 return null;
             }
 
+
             reviewToUpdate.Content = review.Content;
             reviewToUpdate.Rating = review.Rating;
 
@@ -42,9 +43,7 @@ namespace Bookworm_Society_API.Repositories
             var reviewToDelete = await dbContext.Reviews.SingleOrDefaultAsync(r => r.Id == reviewId);
 
             if (reviewToDelete == null)
-            {
                 return null;
-            }
 
             dbContext.Reviews.Remove(reviewToDelete);
             await dbContext.SaveChangesAsync();

@@ -23,10 +23,7 @@ namespace Bookworm_Society_API.Repositories
                 .ThenInclude(c => c.User)
                 .Include(p => p.User)
                 .SingleOrDefaultAsync(p => p.Id == postId);
-            if (post == null)
-            {
-                return null;
-            }
+            
             return post;
         }
         public async Task<Post> CreatePostAsync(Post post)
@@ -38,10 +35,12 @@ namespace Bookworm_Society_API.Repositories
         public async Task<Post> UpdatePostAsync(Post post, int postId)
         {
             var postToUpdate = await dbContext.Posts.SingleOrDefaultAsync(p => p.Id == postId);
+
             if (postToUpdate == null)
             {
                 return null;
             }
+            
 
             postToUpdate.Content = post.Content;
             postToUpdate.IsEdited = true;
@@ -53,11 +52,9 @@ namespace Bookworm_Society_API.Repositories
         public async Task<Post> DeletePostAsync(int postId)
         {
             var postToDelete = await dbContext.Posts.SingleOrDefaultAsync(p => p.Id == postId);
-            
+
             if (postToDelete == null)
-            {
                 return null;
-            }
 
             dbContext.Posts.Remove(postToDelete);
 

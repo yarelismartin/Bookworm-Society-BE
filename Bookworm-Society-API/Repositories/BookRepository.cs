@@ -25,10 +25,6 @@ namespace Bookworm_Society_API.Repositories
                 .ThenInclude(r => r.User)
                 .SingleOrDefaultAsync(b => b.Id == bookId);
 
-            if (book == null)
-            {
-                return null;
-            }
 
             return book;
 
