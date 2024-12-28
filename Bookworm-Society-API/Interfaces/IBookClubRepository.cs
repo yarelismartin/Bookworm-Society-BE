@@ -11,7 +11,7 @@ namespace Bookworm_Society_API.Interfaces
         Task<BookClub> UpdateBookClubAsync(BookClub bookClub, int bookClubId);
         Task<BookClub> DeleteBookClubAsync(int bookClubId);
         Task<BookClub> GetABookClubHaveReadAsync(int bookClubId);
-        Task<BookClub> GetABookClubHavePostAsync(int bookClubId);
+        Task<BookClub> GetABookClubPostsAsync(int bookClubId);
         Task<BookClub> AddUserToBookClubAsync(BookClub bookClub, int userId);
         Task<BookClub> RemoveUserFromBookClubAsync(BookClub bookClub, int userId);
 

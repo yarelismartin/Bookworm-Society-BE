@@ -25,7 +25,7 @@ namespace Bookworm_Society_API.Repositories
         {
             var commentToDelete = await dbContext.Comments.SingleOrDefaultAsync(c => c.Id == commentId);
 
-            if (commentToDelete == null)
+            if (commentToDelete == null) 
             {
                 return null;
             }

@@ -19,10 +19,6 @@ namespace Bookworm_Society_API.Repositories
             User user = await dbContext.Users
                 .SingleOrDefaultAsync(u => u.Id == userId);
             
-            if (user == null)
-            {
-                return null;
-            }
             return user;
         }
 
@@ -54,11 +50,6 @@ namespace Bookworm_Society_API.Repositories
         public async Task<User?> CheckUserAsync(string userUid)
         {
             var user =  await dbContext.Users.FirstOrDefaultAsync(u => u.Uid == userUid);
-
-            if (user == null) 
-            { 
-                return null;
-            } 
 
             return user;
         }

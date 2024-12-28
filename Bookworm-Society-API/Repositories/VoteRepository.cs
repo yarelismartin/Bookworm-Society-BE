@@ -25,10 +25,7 @@ namespace Bookworm_Society_API.Repositories
                 .Include(vs => vs.Votes)
                 .Include(vs => vs.VotingBooks)
                 .SingleOrDefaultAsync(vs => vs.Id == votingSessionId);
-            if (session == null)
-            {
-                return null;
-            }
+            
             return session;
         }
 
