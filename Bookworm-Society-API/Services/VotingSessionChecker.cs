@@ -22,7 +22,7 @@ namespace Bookworm_Society_API.Services
             {
                 try
                 {
-                    _logger.LogInformation("VotingSessionChecker is executing at {Time}", DateTime.UtcNow);
+                    _logger.LogInformation("VotingSessionChecker is executing at {Time}", DateTime.Now);
 
                     using (var scope = _serviceProvider.CreateScope())
                     {

@@ -86,7 +86,7 @@ namespace Bookworm_Society_API.Repositories
                 .AsSplitQuery()
                 .SingleOrDefaultAsync(vs => vs.Id == votingSessionId, cancellationToken);
 
-            if (session.VotingEndDate <= DateTime.UtcNow)
+            if (session.VotingEndDate <= DateTime.Now)
             {
                 session.IsActive = false;
 

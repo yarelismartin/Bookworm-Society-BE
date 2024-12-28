@@ -121,7 +121,7 @@ namespace Bookworm_Society_API.Services
 
             foreach (var session in activeSessions)
             {
-                if(session.VotingEndDate <= DateTime.UtcNow)
+                if(session.VotingEndDate <= DateTime.Now)
                 {
                     await _votingSessionRepository.FinalizeVotingSessionAsync(session.Id, cancellationToken);
 
