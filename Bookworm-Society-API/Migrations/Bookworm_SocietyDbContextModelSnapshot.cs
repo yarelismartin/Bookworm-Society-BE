@@ -97,7 +97,7 @@ namespace Bookworm_Society_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
 
                     b.HasData(
                         new
@@ -276,7 +276,7 @@ namespace Bookworm_Society_API.Migrations
 
                     b.HasIndex("HostId");
 
-                    b.ToTable("BookClubs");
+                    b.ToTable("BookClubs", (string)null);
 
                     b.HasData(
                         new
@@ -418,7 +418,7 @@ namespace Bookworm_Society_API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
 
                     b.HasData(
                         new
@@ -584,7 +584,7 @@ namespace Bookworm_Society_API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
 
                     b.HasData(
                         new
@@ -719,7 +719,7 @@ namespace Bookworm_Society_API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
 
                     b.HasData(
                         new
@@ -946,7 +946,7 @@ namespace Bookworm_Society_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new
@@ -1126,7 +1126,7 @@ namespace Bookworm_Society_API.Migrations
 
                     b.HasIndex("VotingSessionId");
 
-                    b.ToTable("Votes");
+                    b.ToTable("Votes", (string)null);
 
                     b.HasData(
                         new
@@ -1258,7 +1258,7 @@ namespace Bookworm_Society_API.Migrations
 
                     b.HasIndex("WinningBookId");
 
-                    b.ToTable("VotingSessions");
+                    b.ToTable("VotingSessions", (string)null);
 
                     b.HasData(
                         new
