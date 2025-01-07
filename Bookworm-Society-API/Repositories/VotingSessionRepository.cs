@@ -102,7 +102,7 @@ namespace Bookworm_Society_API.Repositories
 
                 else
                 {
-                    session.WinningBookId = await CalculateWinningBook(session.Votes);
+                    session.WinningBookId = await CalculateWinningBookAsync(session.Votes);
 
                 }
 
