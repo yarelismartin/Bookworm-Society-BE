@@ -36,7 +36,7 @@ namespace Bookworm_Society_API.Services
                     _logger.LogError(ex, "An error occured with this VotingSessionCheckern");
                 }
 
-                await Task.Delay(TimeSpan.FromMinutes(30), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(3), stoppingToken);
             }
 
             _logger.LogInformation("VotingSessionChecker service is stopped");
