@@ -7,6 +7,7 @@
     <RootNamespace>Bookworm_Society_API</RootNamespace>
     <UserSecretsId>1e5e6b03-9c7d-43bc-9ce4-30f1af1b76b5</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	  <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
