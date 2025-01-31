@@ -1,0 +1,11 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "./Bookworm-Society-API/Dockerfile"
+
+[deploy]
+startCommand = "dotnet Bookworm-Society-API.dll"
+restartPolicyType = "always"
+healthcheckPath = "/health"
+
+[env]
+DATABASE_URL = "{{DATABASE_URL}}"
