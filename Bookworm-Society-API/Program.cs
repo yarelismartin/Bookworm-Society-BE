@@ -5,6 +5,7 @@ using Bookworm_Society_API.Services;
 using Bookworm_Society_API.Repositories;
 using Bookworm_Society_API.Endpoints;
 using Bookworm_Society_API.Data;
+using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,8 +16,22 @@ builder.Logging.AddConsole(); // Log to the console
 // allows passing datetimes without time zone data 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-// allows our api endpoints to access the database through Entity Framework Core
-builder.Services.AddNpgsql<Bookworm_SocietyDbContext>(builder.Configuration["Bookworm-SocietyDbConnectionString"]);
+// Determine environment-specific connection string
+string connectionString;
+if (builder.Environment.IsDevelopment())
+{
+    // Use local database in development
+    connectionString = builder.Configuration["Bookworm-SocietyDbConnectionString"];
+}
+else
+{
+    // Fetch from Railway environment variable
+    connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+}
+
+// Set the database context
+builder.Services.AddDbContext<Bookworm_SocietyDbContext>(options => options.UseNpgsql(connectionString));
+
 
 // Set the JSON serializer options
 builder.Services.Configure<JsonOptions>(options =>
@@ -68,6 +83,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
 app.UseCors();
+
+// Allow health checks
+builder.Services.AddHealthChecks();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
