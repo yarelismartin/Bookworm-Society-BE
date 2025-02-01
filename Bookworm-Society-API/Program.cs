@@ -6,6 +6,7 @@ using Bookworm_Society_API.Repositories;
 using Bookworm_Society_API.Endpoints;
 using Bookworm_Society_API.Data;
 using Microsoft.EntityFrameworkCore;
+using Bookworm_Society_API.Utility;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -82,6 +83,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
+
+// Use health checks
+app.UseHealthChecks("/health");
 app.UseCors();
 
 // Allow health checks
@@ -94,7 +98,23 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// Only use HTTPS redirection in development
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<Bookworm_SocietyDbContext>();
+
+    // Apply any pending migrations to the database
+    await context.Database.MigrateAsync();
+
+    // Run additional data management tasks
+    await DataHelper.ManageDataAsync(scope.ServiceProvider);
+}
 
 app.MapBookClubEndpoints();
 app.MapBookEndpoints(); 
