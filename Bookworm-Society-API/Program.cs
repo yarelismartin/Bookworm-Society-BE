@@ -14,6 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders(); // Optional: Remove other providers if needed
 builder.Logging.AddConsole(); // Log to the console
 
+builder.Services.AddHealthChecks();// Allow health checks
+
 // allows passing datetimes without time zone data 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
@@ -88,8 +90,6 @@ var app = builder.Build();
 app.UseHealthChecks("/health");
 app.UseCors();
 
-// Allow health checks
-builder.Services.AddHealthChecks();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
