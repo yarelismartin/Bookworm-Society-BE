@@ -16,7 +16,7 @@ RUN dotnet publish "./Bookworm-Society-API.csproj" -c $BUILD_CONFIGURATION -o /a
 
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Bookworm-Society-API.dll"]
