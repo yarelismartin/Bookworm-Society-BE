@@ -5,7 +5,12 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bookworm-Society-API", "Bookworm-Society-API\Bookworm-Society-API.csproj", "{2C2DA4B6-D758-4B0A-B581-81CC9B4954CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookworm-Society-BE.Tests", "Bookworm-Society-BE.Tests\Bookworm-Society-BE.Tests.csproj", "{5BBD94A1-8ACD-4A3D-B213-C6BC52FD142E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bookworm-Society-BE.Tests", "Bookworm-Society-BE.Tests\Bookworm-Society-BE.Tests.csproj", "{5BBD94A1-8ACD-4A3D-B213-C6BC52FD142E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BA77DE0A-8AE4-4901-BFDB-64253B2AD978}"
+	ProjectSection(SolutionItems) = preProject
+		railway.toml = railway.toml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

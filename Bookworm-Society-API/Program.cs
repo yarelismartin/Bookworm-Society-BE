@@ -5,6 +5,8 @@ using Bookworm_Society_API.Services;
 using Bookworm_Society_API.Repositories;
 using Bookworm_Society_API.Endpoints;
 using Bookworm_Society_API.Data;
+using Microsoft.EntityFrameworkCore;
+using Bookworm_Society_API.Utility;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,11 +14,27 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders(); // Optional: Remove other providers if needed
 builder.Logging.AddConsole(); // Log to the console
 
+builder.Services.AddHealthChecks();// Allow health checks
+
 // allows passing datetimes without time zone data 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-// allows our api endpoints to access the database through Entity Framework Core
-builder.Services.AddNpgsql<Bookworm_SocietyDbContext>(builder.Configuration["Bookworm-SocietyDbConnectionString"]);
+// Determine environment-specific connection string
+string connectionString;
+if (builder.Environment.IsDevelopment())
+{
+    // Use local database in development
+    connectionString = builder.Configuration["Bookworm-SocietyDbConnectionString"];
+}
+else
+{
+    // Fetch from Railway environment variable
+    connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+}
+
+// Set the database context
+builder.Services.AddDbContext<Bookworm_SocietyDbContext>(options => options.UseNpgsql(connectionString));
+
 
 // Set the JSON serializer options
 builder.Services.Configure<JsonOptions>(options =>
@@ -56,7 +74,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "http://localhost:5003")
+        policy.WithOrigins("http://localhost:3000", "https://fe-bookworm-society-production.up.railway.app")
         .AllowAnyMethod()
         .AllowAnyHeader();
     });
@@ -67,7 +85,11 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
+
+// Use health checks
+app.UseHealthChecks("/health");
 app.UseCors();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -76,7 +98,23 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// Only use HTTPS redirection in development
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<Bookworm_SocietyDbContext>();
+
+    // Apply any pending migrations to the database
+    await context.Database.MigrateAsync();
+
+    // Run additional data management tasks
+    await DataHelper.ManageDataAsync(scope.ServiceProvider);
+}
 
 app.MapBookClubEndpoints();
 app.MapBookEndpoints(); 
