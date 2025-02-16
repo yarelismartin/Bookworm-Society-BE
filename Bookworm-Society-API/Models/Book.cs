@@ -5,8 +5,13 @@
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string Author { get; set; } 
-        public string Genre { get; set; }
+
+        public int AuthorId { get; set; } 
+        public Author Author { get; set; }
+
+        public int GenreId { get; set; }
+        public Genre Genre { get; set; }
+
         public string ImageUrl { get; set; }
         public List<VotingSession>? VotingSessions {  get; set; }
         public List<BookClub>? BookClubs { get; set;}
