@@ -20,6 +20,10 @@ namespace Bookworm_Society_API.Repositories
             var bookclub = await dbContext.BookClubs
                 .Include(bc => bc.VotingSessions)
                     .ThenInclude(vs => vs.VotingBooks)
+                        .ThenInclude(vb => vb.Author)
+                .Include(bc => bc.VotingSessions)
+                    .ThenInclude(vs => vs.VotingBooks)
+                        .ThenInclude(vb => vb.Genre)
                 .Include(bc => bc.VotingSessions)
                     .ThenInclude(vs => vs.Votes)
                 .SingleOrDefaultAsync(bc => bc.Id == bookClubId);

@@ -14,6 +14,9 @@ namespace Bookworm_Society_API.Data
         public DbSet<BookClub> BookClubs { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Vote> Votes { get; set; }
+        public DbSet<Genre> Genres { get; set; }
+        public DbSet<Author> Author { get; set; }
+
 
         public Bookworm_SocietyDbContext(DbContextOptions<Bookworm_SocietyDbContext> context) : base(context) 
         {
@@ -72,6 +75,10 @@ namespace Bookworm_Society_API.Data
             modelBuilder.Entity<Book>().HasData(BookData.Books);
 
             modelBuilder.Entity<Vote>().HasData(VoteData.Votes);
+
+            modelBuilder.Entity<Author>().HasData(AuthorData.Authors);
+
+            modelBuilder.Entity<Genre>().HasData(GenreData.Genres);
 
         }
     }

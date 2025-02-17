@@ -27,7 +27,6 @@ namespace Bookworm_Society_API.Services
                     using (var scope = _serviceProvider.CreateScope())
                     {
                         var votingService = scope.ServiceProvider.GetRequiredService<IVotingSessionService>();
-
                         await votingService.CheckAndUpdateVotingSessionAsync(stoppingToken);
                     }
                 }

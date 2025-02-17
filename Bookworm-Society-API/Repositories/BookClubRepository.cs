@@ -28,6 +28,7 @@ namespace Bookworm_Society_API.Repositories
             var bookClub =  await dbContext.BookClubs
                 .Include(bc => bc.Host)
                 .Include(bc => bc.Book)
+                .ThenInclude(b => b.Author)
                 .Include(bc => bc.Members)
                 .SingleOrDefaultAsync(bc => bc.Id == bookClubId);
            
@@ -87,6 +88,7 @@ namespace Bookworm_Society_API.Repositories
         {
             var bookClub = await dbContext.BookClubs
                 .Include(bc => bc.HaveRead)
+                .ThenInclude(hr => hr.Author)
                 .SingleOrDefaultAsync(bc => bc.Id == bookClubId);
 
             return bookClub;

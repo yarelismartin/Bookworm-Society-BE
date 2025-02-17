@@ -13,7 +13,7 @@ namespace Bookworm_Society_API.DTOs
         {
             Id = book.Id;
             Title = book.Title;
-            Author = book.Author;
+            Author = $"{book.Author.FirstName} {book.Author.LastName}";
             ImageUrl = book.ImageUrl;
         }
     }

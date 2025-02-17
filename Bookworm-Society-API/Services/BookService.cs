@@ -36,8 +36,8 @@ namespace Bookworm_Society_API.Services
                 book.Id,
                 book.Title,
                 book.Description,
-                book.Author,
-                book.Genre,
+                Author = $"{book.Author.FirstName} {book.Author.LastName}",
+                Genre = book.Genre.Name,
                 book.ImageUrl,
                 Reviews = book.Reviews?
                 .OrderBy(r => r.CreatedDate)

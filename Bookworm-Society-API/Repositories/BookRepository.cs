@@ -16,13 +16,17 @@ namespace Bookworm_Society_API.Repositories
         }
         public async Task<List<Book>> GetAllBooksAsync()
         {
-            return await dbContext.Books.ToListAsync();
+            return await dbContext.Books
+                .Include(b => b.Author)
+                .ToListAsync();
         }
         public async Task<Book> GetSingleBookAsync(int bookId)
         {
             var book = await dbContext.Books
                 .Include(b => b.Reviews)
                 .ThenInclude(r => r.User)
+                .Include(b => b.Author)
+                .Include(b => b.Genre)
                 .SingleOrDefaultAsync(b => b.Id == bookId);
 
 
@@ -33,6 +37,7 @@ namespace Bookworm_Society_API.Repositories
         {
             return await dbContext.Books
                 .Include(b => b.Reviews)
+                .Include(b => b.Author)
                 .OrderByDescending(b => b.Reviews.Any() ? b.Reviews.Average(r => r.Rating) : 0)
                 .FirstOrDefaultAsync(); 
         }

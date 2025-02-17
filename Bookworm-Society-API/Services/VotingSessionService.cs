@@ -56,8 +56,8 @@ namespace Bookworm_Society_API.Services
                     vb.Id,
                     vb.Title,
                     vb.Description,
-                    vb.Author,
-                    vb.Genre,
+                    Author = $"{vb.Author.FirstName} {vb.Author.LastName}",
+                    Genre = vb.Genre.Name,
                     vb.ImageUrl,
                     TotalVotes = votingsession.Votes?.Count(v => v.BookId == vb.Id)
                 }),
