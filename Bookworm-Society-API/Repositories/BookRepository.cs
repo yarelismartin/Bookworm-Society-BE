@@ -25,8 +25,8 @@ namespace Bookworm_Society_API.Repositories
         {
             return await dbContext.Books
                 .Include(b => b.Author)
-                .Skip((pageNumber - 1) * pageSize)  // Skip previous pages
-                .Take(pageSize)                     // Take the current page items
+                .Skip((pageNumber - 1) * pageSize) 
+                .Take(pageSize)                     
                 .ToListAsync();
         }
 
@@ -48,7 +48,8 @@ namespace Bookworm_Society_API.Repositories
             return await dbContext.Books
                 .Include(b => b.Reviews)
                 .Include(b => b.Author)
-                .OrderByDescending(b => b.Reviews.Any() ? b.Reviews.Average(r => r.Rating) : 0)
+                .Where(b => b.Reviews.Any() && b.Reviews.Average(r => r.Rating) >= 4.0)
+                .OrderByDescending(b => b.Reviews.Average(r => r.Rating))
                 .FirstOrDefaultAsync(); 
         }
         /*public async Task<List<Book>> SearchBooksAsync()
