@@ -14,13 +14,25 @@ namespace Bookworm_Society_API.Endpoints
         {
             var group = routes.MapGroup("books").WithTags(nameof(Book));
 
-            group.MapGet("/", async (IBookService bookService) =>
+            /*group.MapGet("/", async (IBookService bookService) =>
             {
                 var books = await bookService.GetAllBooksAsync();
 
                 if (!books.Any())
                 {
                     return Results.Ok(new List<BookClub>());
+                }
+                return Results.Ok(books);
+            });*/
+
+
+            group.MapGet("/", async (IBookService bookService, int page = 1, int pageSize = 5) =>
+            {
+                var books = await bookService.GetPaginatedBooksAsync(page, pageSize);
+
+                if (!books.Any())
+                {
+                    return Results.Ok(new List<BookDTO>());
                 }
                 return Results.Ok(books);
             });

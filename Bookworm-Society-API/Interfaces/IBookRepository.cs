@@ -10,6 +10,7 @@ namespace Bookworm_Society_API.Interfaces
         Task<Book> GetSingleBookAsync(int bookId);
         Task<List<Book>> GetAllBooksAsync();
         Task<Book> GetMostPopularBookAsync();
+        Task<List<Book>> GetPaginatedBooksAsync(int pageNumber, int pageSize);
 /*        Task<List<Book>> SearchBooksAsync();
 */    }
 }

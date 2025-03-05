@@ -20,6 +20,16 @@ namespace Bookworm_Society_API.Repositories
                 .Include(b => b.Author)
                 .ToListAsync();
         }
+
+        public async Task<List<Book>> GetPaginatedBooksAsync(int pageNumber, int pageSize)
+        {
+            return await dbContext.Books
+                .Include(b => b.Author)
+                .Skip((pageNumber - 1) * pageSize)  // Skip previous pages
+                .Take(pageSize)                     // Take the current page items
+                .ToListAsync();
+        }
+
         public async Task<Book> GetSingleBookAsync(int bookId)
         {
             var book = await dbContext.Books

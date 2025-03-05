@@ -22,6 +22,12 @@ namespace Bookworm_Society_API.Services
             return books.Select(book => new BookDTO(book)).ToList();
         }
 
+        public async Task<List<BookDTO>> GetPaginatedBooksAsync(int pageNumber, int pageSize)
+        {
+            var books = await _bookRepository.GetPaginatedBooksAsync(pageNumber, pageSize);
+            return books.Select(book => new BookDTO(book)).ToList();
+        }
+
         public async Task<Result<object>> GetSingleBookAsync(int bookId)
         {
             if(! await _baseRepository.BookExistsAsync(bookId))
