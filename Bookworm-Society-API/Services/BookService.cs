@@ -65,11 +65,11 @@ namespace Bookworm_Society_API.Services
 
             return Result<object>.SuccessResult(bookObj);
         }
-        public async Task<BookDTO?> GetMostPopularBookAsync()
+        public async Task<List<BookDTO?>> GetMostPopularBookAsync()
         {
-            var book = await _bookRepository.GetMostPopularBookAsync();
+            var books = await _bookRepository.GetMostPopularBookAsync();
 
-            return new BookDTO(book);
+            return books.Select(book => new BookDTO(book)).ToList();
         }
         /*public async Task<Result<List<BookDTO>>> SearchBooksAsync()
         {

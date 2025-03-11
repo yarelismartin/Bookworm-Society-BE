@@ -60,9 +60,14 @@ namespace Bookworm_Society_API.Endpoints
 
             group.MapGet("/popular", async (IBookService bookService) =>
             {
-                var book = await bookService.GetMostPopularBookAsync();
+                var popularBook = await bookService.GetMostPopularBookAsync();
 
-                return Results.Ok(book);
+                if (!popularBook.Any())
+                {
+                    return Results.Ok(new List<BookDTO>());
+                }
+
+                return Results.Ok(popularBook);
             });
 
             group.MapGet("/search", async (IBookService bookService) =>

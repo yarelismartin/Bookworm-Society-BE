@@ -45,14 +45,15 @@ namespace Bookworm_Society_API.Repositories
             return book;
 
         }
-        public async Task<Book?> GetMostPopularBookAsync()
+        public async Task<List<Book?>> GetMostPopularBookAsync()
         {
             return await dbContext.Books
                 .Include(b => b.Reviews)
                 .Include(b => b.Author)
                 .Where(b => b.Reviews.Any() && b.Reviews.Average(r => r.Rating) >= 4.0)
                 .OrderByDescending(b => b.Reviews.Average(r => r.Rating))
-                .FirstOrDefaultAsync(); 
+                .Take(10)
+                .ToListAsync(); 
         }
         /*public async Task<List<Book>> SearchBooksAsync()
         {
