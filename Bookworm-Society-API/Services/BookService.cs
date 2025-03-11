@@ -1,5 +1,6 @@
 ﻿using Bookworm_Society_API.Data;
 using Bookworm_Society_API.DTOs;
+using Bookworm_Society_API.Helpers;
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Result;
 
@@ -20,6 +21,17 @@ namespace Bookworm_Society_API.Services
             var books = await _bookRepository.GetAllBooksAsync();
 
             return books.Select(book => new BookDTO(book)).ToList();
+        }
+
+        public async Task<PagedList<BookDTO>> GetPaginatedBooksAsync(int pageNumber, int pageSize)
+        {
+            var pagedBooks = await _bookRepository.GetPaginatedBooksAsync(pageNumber, pageSize);
+            
+            // Map the list of Books to BookDTOs
+            var bookDTOs = pagedBooks.Items.Select(book => new BookDTO(book)).ToList();
+
+            // Return a PagedList<BookDTO> with metadata and transformed items
+            return new PagedList<BookDTO>(bookDTOs, pagedBooks.PageNumber, pagedBooks.PageSize, pagedBooks.TotalCount);
         }
 
         public async Task<Result<object>> GetSingleBookAsync(int bookId)
@@ -53,11 +65,11 @@ namespace Bookworm_Society_API.Services
 
             return Result<object>.SuccessResult(bookObj);
         }
-        public async Task<BookDTO?> GetMostPopularBookAsync()
+        public async Task<List<BookDTO?>> GetMostPopularBookAsync()
         {
-            var book = await _bookRepository.GetMostPopularBookAsync();
+            var books = await _bookRepository.GetMostPopularBookAsync();
 
-            return new BookDTO(book);
+            return books.Select(book => new BookDTO(book)).ToList();
         }
         /*public async Task<Result<List<BookDTO>>> SearchBooksAsync()
         {
