@@ -1,4 +1,5 @@
 ﻿using Bookworm_Society_API.DTOs;
+using Bookworm_Society_API.Helpers;
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Bookworm_Society_API.Result;
@@ -30,10 +31,17 @@ namespace Bookworm_Society_API.Endpoints
             {
                 var books = await bookService.GetPaginatedBooksAsync(page, pageSize);
 
-                /*if (!books.Any())
+                if (!books.Items.Any())
                 {
-                    return Results.Ok(new List<BookDTO>());
-                }*/
+                    // Return a PagedList with an empty list and pagination metadata
+                    var emptyPagedList = new PagedList<BookDTO>(
+                        new List<BookDTO>(),
+                        books.PageNumber,
+                        books.PageSize,
+                        books.TotalCount
+                    );
+                    return Results.Ok(emptyPagedList);
+                }
                 return Results.Ok(books);
             });
 
