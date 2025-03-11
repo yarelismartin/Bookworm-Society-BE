@@ -30,10 +30,10 @@ namespace Bookworm_Society_API.Endpoints
             {
                 var books = await bookService.GetPaginatedBooksAsync(page, pageSize);
 
-                if (!books.Any())
+                /*if (!books.Any())
                 {
                     return Results.Ok(new List<BookDTO>());
-                }
+                }*/
                 return Results.Ok(books);
             });
 

@@ -1,5 +1,6 @@
 ﻿using Bookworm_Society_API.Data;
 using Bookworm_Society_API.DTOs;
+using Bookworm_Society_API.Helpers;
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Result;
 
@@ -22,10 +23,15 @@ namespace Bookworm_Society_API.Services
             return books.Select(book => new BookDTO(book)).ToList();
         }
 
-        public async Task<List<BookDTO>> GetPaginatedBooksAsync(int pageNumber, int pageSize)
+        public async Task<PagedList<BookDTO>> GetPaginatedBooksAsync(int pageNumber, int pageSize)
         {
-            var books = await _bookRepository.GetPaginatedBooksAsync(pageNumber, pageSize);
-            return books.Select(book => new BookDTO(book)).ToList();
+            var pagedBooks = await _bookRepository.GetPaginatedBooksAsync(pageNumber, pageSize);
+            
+            // Map the list of Books to BookDTOs
+            var bookDTOs = pagedBooks.Items.Select(book => new BookDTO(book)).ToList();
+
+            // Return a PagedList<BookDTO> with metadata and transformed items
+            return new PagedList<BookDTO>(bookDTOs, pagedBooks.PageNumber, pagedBooks.PageSize, pagedBooks.TotalCount);
         }
 
         public async Task<Result<object>> GetSingleBookAsync(int bookId)

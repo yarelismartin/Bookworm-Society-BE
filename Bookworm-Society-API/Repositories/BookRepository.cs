@@ -1,4 +1,5 @@
 ﻿using Bookworm_Society_API.Data;
+using Bookworm_Society_API.Helpers;
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -21,13 +22,14 @@ namespace Bookworm_Society_API.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<Book>> GetPaginatedBooksAsync(int pageNumber, int pageSize)
+        public async Task<PagedList<Book>> GetPaginatedBooksAsync(int pageNumber, int pageSize)
         {
-            return await dbContext.Books
-                .Include(b => b.Author)
-                .Skip((pageNumber - 1) * pageSize) 
-                .Take(pageSize)                     
-                .ToListAsync();
+            var bookResponses =  dbContext.Books
+                .Include(b => b.Author);
+
+            var books = await PagedList<Book>.CreateAsync(bookResponses, pageNumber, pageSize);
+
+            return books;
         }
 
         public async Task<Book> GetSingleBookAsync(int bookId)
