@@ -24,7 +24,7 @@ namespace Bookworm_Society_API.Repositories
 
         public async Task<PagedList<Book>> GetPaginatedBooksAsync(int pageNumber, int pageSize)
         {
-            var bookResponses =  dbContext.Books
+            var bookResponses = dbContext.Books
                 .Include(b => b.Author);
 
             var books = await PagedList<Book>.CreateAsync(bookResponses, pageNumber, pageSize);
