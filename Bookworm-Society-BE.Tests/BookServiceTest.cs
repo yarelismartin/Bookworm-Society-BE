@@ -30,7 +30,6 @@ namespace Bookworm_Society_BE.Tests
 
 
         [Fact]
-
         public async Task GetAllBooks_ShouldReturnListOfBookDTOS()
         {
             //ARANGE
@@ -89,6 +88,86 @@ namespace Bookworm_Society_BE.Tests
             result.TotalCount.Should().Be(pagedBooks.TotalCount);
             result.HasNextPage.Should().Be(pagedBooks.HasNextPage);
             result.HasPreviousPage.Should().Be(pagedBooks.HasPreviousPage);
+
+        }
+
+        [Fact]
+        public async Task GetSingleBook_WhereBookExist_ShouldReturnBookDetail()
+        {
+
+        //ARRANGE 
+            int bookId = 103;
+
+            var book = new Book
+            {
+                Id = bookId,
+                Title = "Title",
+                Description = "Description",
+                AuthorId = 3,
+                Author = new Author { Id = 3, FirstName = "sara", LastName = "june" },
+                GenreId = 4,
+                Genre = new Genre { Id = 4, Name = "genre name" },
+                ImageUrl = "image",
+                Reviews = new List<Review>
+                {
+                    new Review {
+                        Id = 2,
+                        Content = "content",
+                        CreatedDate = new DateTime(2023, 2, 15),
+                        Rating = 3,
+                        User = new User
+                        { Id = 1,
+                            FirstName = "John",
+                            LastName = "Doe",
+                            ImageUrl = "https://example.com/johndoe.jpg",
+                            Username = "johndoe",
+                            Uid = "useruid123"
+                        }
+                    }
+                }
+            };
+
+            var expectedBook = new
+            {
+                book.Id,
+                book.Title,
+                book.Description,
+                Author = $"{book.Author.FirstName} {book.Author.LastName}",
+                Genre = book.Genre.Name,
+                book.ImageUrl,
+                Reviews = book.Reviews?
+         .OrderBy(r => r.CreatedDate)
+         .Select(r => new
+         {
+             r.Id,
+             r.Content,
+             r.CreatedDate,
+             r.Rating,
+             User = new UserDTO(r.User)
+         }).ToList()
+            };
+
+
+            //MOCK
+            _mockBookRepository
+                .Setup(repo => repo.GetSingleBookAsync(bookId))
+                .ReturnsAsync(book);
+
+            _mockBaseRepository
+                .Setup(repo => repo.BookExistsAsync(bookId))
+                .ReturnsAsync(true);
+
+
+
+        //ACT
+        var result = await _bookService.GetSingleBookAsync(bookId);
+
+
+        //ASSERT
+        result.Should().NotBeNull();
+        result.Success.Should().BeTrue();
+        result.Data.Should().NotBeNull();
+        result.Data.Should().BeEquivalentTo(expectedBook);
 
         }
 
