@@ -88,13 +88,13 @@ namespace Bookworm_Society_BE.Tests
                 DateCreated = new DateTime(2023, 11, 20),
                 HostId = 1,
                 BookId = 102,
-                Book = new Book { Id = 1, Title = "Dune" },
+                Book = new Book { Id = 1, Title = "Dune", Author = new Author { FirstName = "test", LastName = "testt" }, ImageUrl="test" },
                 Host = new User { Id = 1 },
                 Members = new List<User>
-        {
-            new User { Id = 2 },
-            new User { Id = 3 }
-        }
+                    {
+                        new User { Id = 2 },
+                        new User { Id = 3 }
+                    }
             };
 
             var expectedDto = new
@@ -105,6 +105,9 @@ namespace Bookworm_Society_BE.Tests
                 bookClub.MeetUpType,
                 bookClub.ImageUrl,
                 bookClub.DateCreated,
+                Host = new UserDTO(bookClub.Host),
+                Book = bookClub.Book != null ? new BookDTO(bookClub.Book) : null,
+                Members = bookClub.Members?.Select(m => new UserDTO(m)).ToList(),
                 isMemberOrHost = bookClub.Members.Any(m => m.Id == userId) || bookClub.Host.Id == userId,
             };
 
@@ -121,7 +124,6 @@ namespace Bookworm_Society_BE.Tests
             // Assert
             result.Should().NotBeNull();
             result.Success.Should().BeTrue();
-            result.Data.Should().NotBeNull();
             result.Data.Should().BeEquivalentTo(expectedDto);
         }
 
