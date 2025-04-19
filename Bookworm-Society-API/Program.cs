@@ -74,7 +74,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "https://the-bookworm-society.up.railway.app")
+        policy.WithOrigins("http://localhost:3000", "https://the-bookworm.up.railway.app")
         .AllowAnyMethod()
         .AllowAnyHeader();
     });
