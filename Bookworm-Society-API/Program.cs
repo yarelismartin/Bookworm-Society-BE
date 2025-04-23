@@ -15,6 +15,7 @@ builder.Logging.ClearProviders(); // Optional: Remove other providers if needed
 builder.Logging.AddConsole(); // Log to the console
 
 builder.Services.AddHealthChecks();// Allow health checks
+builder.Services.AddSignalR();
 
 // allows passing datetimes without time zone data 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
