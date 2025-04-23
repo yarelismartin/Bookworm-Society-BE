@@ -127,6 +127,6 @@ app.MapUserEndpoints();
 app.MapVoteEndpoints();
 app.MapVotingSessionEndpoints();
 
-app.MapHub<NotificationHub>("/notifaction-hub");
+app.MapHub<NotificationHub>("/notification-hub");
 
 app.Run();

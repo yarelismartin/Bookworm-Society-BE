@@ -4,7 +4,7 @@ Console.WriteLine("Starting SignalR client...");
 
 // Adjust this to match your backend's URL and port
 var connection = new HubConnectionBuilder()
-    .WithUrl("https://localhost:7087/notifaction-hub") // or the correct port in your backend
+    .WithUrl("https://localhost:7087/notification-hub") // or the correct port in your backend
     .WithAutomaticReconnect()
     .Build();
 
