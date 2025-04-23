@@ -4,9 +4,13 @@ namespace Bookworm_Society_API.SignalR
 {
     public sealed class NotificationHub : Hub
     {
-        public override async Task OnConnectedAsync()
+        // Called by clients to join a book club group
+        public async Task JoinBookClubGroup(string bookClubId)
         {
-            await Clients.All.SendAsync("ReceivedMessage", $"{Context.ConnectionId} has joined");
+            await Groups.AddToGroupAsync(Context.ConnectionId, bookClubId);
         }
+
+
+
     }
 }

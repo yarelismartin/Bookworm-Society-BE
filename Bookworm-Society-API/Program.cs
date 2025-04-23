@@ -7,6 +7,7 @@ using Bookworm_Society_API.Endpoints;
 using Bookworm_Society_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Bookworm_Society_API.Utility;
+using Bookworm_Society_API.SignalR;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -125,5 +126,7 @@ app.MapReviewEndpoints();
 app.MapUserEndpoints();
 app.MapVoteEndpoints();
 app.MapVotingSessionEndpoints();
+
+app.MapHub<NotificationHub>("/notifaction-hub");
 
 app.Run();
