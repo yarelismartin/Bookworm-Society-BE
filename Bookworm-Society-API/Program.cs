@@ -7,6 +7,7 @@ using Bookworm_Society_API.Endpoints;
 using Bookworm_Society_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Bookworm_Society_API.Utility;
+using Bookworm_Society_API.SignalR;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,7 @@ builder.Logging.ClearProviders(); // Optional: Remove other providers if needed
 builder.Logging.AddConsole(); // Log to the console
 
 builder.Services.AddHealthChecks();// Allow health checks
+builder.Services.AddSignalR();
 
 // allows passing datetimes without time zone data 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -124,5 +126,7 @@ app.MapReviewEndpoints();
 app.MapUserEndpoints();
 app.MapVoteEndpoints();
 app.MapVotingSessionEndpoints();
+
+app.MapHub<NotificationHub>("/notification-hub");
 
 app.Run();

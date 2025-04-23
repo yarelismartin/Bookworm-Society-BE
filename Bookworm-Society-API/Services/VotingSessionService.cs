@@ -3,6 +3,8 @@ using Bookworm_Society_API.DTOs;
 using Bookworm_Society_API.Interfaces;
 using Bookworm_Society_API.Models;
 using Bookworm_Society_API.Result;
+using Bookworm_Society_API.SignalR;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Bookworm_Society_API.Services
 {
@@ -10,11 +12,14 @@ namespace Bookworm_Society_API.Services
     {
         private readonly IVotingSessionRepository _votingSessionRepository;
         private readonly IBaseRepository _baseRepository;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public VotingSessionService(IVotingSessionRepository votingSessionRepository, IBaseRepository baseRepository)
+        public VotingSessionService(IVotingSessionRepository votingSessionRepository, IBaseRepository baseRepository, IHubContext<NotificationHub> hubContext)
         {
             _votingSessionRepository = votingSessionRepository;
             _baseRepository = baseRepository;
+            _hubContext = hubContext;
+
         }
 
         public async Task<Result<object?>> GetLatestVotingSessionAsync(int bookClubId, int userId)
@@ -109,6 +114,9 @@ namespace Bookworm_Society_API.Services
             };
 
             var createdVotginSession = await _votingSessionRepository.CreateVotingSession(votingSession);
+            await _hubContext.Clients.Group(votingSessionDTO.BookClubId.ToString())
+    .SendAsync("ReceivedMessage", $"Voting session has started for book club {votingSessionDTO.BookClubId}!");
+
             return Result<VotingSession>.SuccessResult(votingSession);
 
 
